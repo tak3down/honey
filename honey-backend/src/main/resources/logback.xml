@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configuration>
+
+  <appender class="ch.qos.logback.core.ConsoleAppender" name="CONSOLE">
+    <encoder>
+      <pattern>%d{HH:mm:ss} %logger{36} ➢ %msg%n</pattern>
+    </encoder>
+  </appender>
+
+  <logger level="WARN" name="org.eclipse.jetty"/>
+
+  <logger level="WARN" name="org.jetbrains.exposed.sql"/>
+  <logger level="INFO" name="io.swagger.v3.parser"/>
+  <logger level="INFO" name="io.github.honey.Honey"/>
+  <logger level="WARN" name="org.apache.http.impl.conn.Wire"/>
+  <logger level="WARN" name="o.e.j"/>
+  <logger level="WARN" name="o.e.jetty"/>
+  <root level="INFO">
+    <appender-ref ref="CONSOLE"/>
+  </root>
+
+</configuration>
