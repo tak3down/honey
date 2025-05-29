@@ -111,7 +111,7 @@ public final class GameService {
         (a, b) -> {
           final int scoreCompare = Integer.compare(b.getScore(), a.getScore());
           if (scoreCompare == 0) {
-            return Long.compare(a.getTimeElapsed().toMillis(), b.getTimeElapsed().toMillis());
+            return Long.compare(a.getTimeElapsed(), b.getTimeElapsed());
           }
           return scoreCompare;
         });
@@ -148,7 +148,7 @@ public final class GameService {
             (a, b) -> {
               final int scoreCompare = Integer.compare(b.getScore(), a.getScore());
               if (scoreCompare == 0) {
-                return Long.compare(a.getTimeElapsed().toMillis(), b.getTimeElapsed().toMillis());
+                return Long.compare(a.getTimeElapsed(), b.getTimeElapsed());
               }
               return scoreCompare;
             })
