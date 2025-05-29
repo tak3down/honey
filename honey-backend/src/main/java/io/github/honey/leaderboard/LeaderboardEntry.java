@@ -6,7 +6,7 @@ import java.time.LocalDateTime;
 public final class LeaderboardEntry {
   private String username;
   private int score;
-  private Duration timeElapsed;
+  private long timeElapsed;
   private LocalDateTime completedAt;
 
   public LeaderboardEntry() {}
@@ -18,7 +18,8 @@ public final class LeaderboardEntry {
       final LocalDateTime completedAt) {
     this.username = username;
     this.score = score;
-    this.timeElapsed = timeElapsed;
+    // have to convert cuz ts doesn't support java duration
+    this.timeElapsed = timeElapsed.toMillis();
     this.completedAt = completedAt;
   }
 
@@ -38,11 +39,11 @@ public final class LeaderboardEntry {
     this.score = score;
   }
 
-  public Duration getTimeElapsed() {
+  public long getTimeElapsed() {
     return timeElapsed;
   }
 
-  public void setTimeElapsed(final Duration timeElapsed) {
+  public void setTimeElapsed(final long timeElapsed) {
     this.timeElapsed = timeElapsed;
   }
 
