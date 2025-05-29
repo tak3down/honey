@@ -1,0 +1,10 @@
+version: 2
+updates:
+  - package-ecosystem: "gradle"
+    directory: "/honey-backend"
+    schedule:
+      interval: "daily"
+  - package-ecosystem: "npm"
+    directory: "/honey-frontend"
+    schedule:
+      interval: "daily"
