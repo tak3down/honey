@@ -16,7 +16,13 @@ val buildTask = tasks.register<NpmTask>("buildFrontend") {
     inputs.dir(project.fileTree("app"))
     inputs.dir(project.fileTree("public"))
     inputs.dir("node_modules")
-    inputs.files("next.config.ts", "next-env.d.ts", "tsconfig.json", "postcss.config.mjs")
+    inputs.files(
+        "next.config.js",
+        "next-env.d.ts",
+        "tsconfig.json",
+        "postcss.config.js",
+        "tailwind.config.js"
+    )
     outputs.dir(project.projectDir.resolve("out"))
 
 }
