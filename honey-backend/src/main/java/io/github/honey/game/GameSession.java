@@ -1,12 +1,14 @@
-package io.github.honey;
+package io.github.honey.game;
 
-public class GameSession {
+import java.time.Instant;
+
+public final class GameSession {
   private String sessionId;
   private String username;
   private int score;
   private int totalQuestions;
-  private long startTime;
-  private long endTime;
+  private Instant startTime;
+  private Instant endTime;
   private boolean isFinished;
   private GameQuestion currentQuestion;
   private int questionNumber;
@@ -18,12 +20,11 @@ public class GameSession {
     this.username = username;
     this.score = 0;
     this.totalQuestions = 20;
-    this.startTime = System.currentTimeMillis();
+    this.startTime = Instant.now();
     this.isFinished = false;
     this.questionNumber = 1;
   }
 
-  // Getters and setters
   public String getSessionId() {
     return sessionId;
   }
@@ -56,19 +57,19 @@ public class GameSession {
     this.totalQuestions = totalQuestions;
   }
 
-  public long getStartTime() {
+  public Instant getStartTime() {
     return startTime;
   }
 
-  public void setStartTime(final long startTime) {
+  public void setStartTime(final Instant startTime) {
     this.startTime = startTime;
   }
 
-  public long getEndTime() {
+  public Instant getEndTime() {
     return endTime;
   }
 
-  public void setEndTime(final long endTime) {
+  public void setEndTime(final Instant endTime) {
     this.endTime = endTime;
   }
 

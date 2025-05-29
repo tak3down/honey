@@ -1,4 +1,4 @@
-package io.github.honey;
+package io.github.honey.game;
 
 public class AnswerRequest {
 

@@ -1,17 +1,26 @@
-package io.github.honey;
+package io.github.honey.game;
 
+import static java.util.Collections.shuffle;
+import static java.util.stream.Collectors.toList;
+
+import io.github.honey.leaderboard.LeaderboardEntry;
+import java.time.Duration;
+import java.time.Instant;
 import java.time.LocalDateTime;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
-import java.util.stream.Collectors;
+import java.util.concurrent.ThreadLocalRandom;
 import org.springframework.stereotype.Service;
 
 @Service
-public class GameService {
+public final class GameService {
   private final Map<String, GameSession> activeSessions = new ConcurrentHashMap<>();
   private final List<LeaderboardEntry> leaderboard = new ArrayList<>();
 
-  // Country data for the game
   private final Map<String, String> countryFlags = new HashMap<>();
   private final List<String> countries = new ArrayList<>();
 
@@ -20,7 +29,6 @@ public class GameService {
   }
 
   private void initializeCountryData() {
-    // Initialize with some country data
     countryFlags.put("United States", "https://flagcdn.com/w320/us.png");
     countryFlags.put("United Kingdom", "https://flagcdn.com/w320/gb.png");
     countryFlags.put("Germany", "https://flagcdn.com/w320/de.png");
@@ -59,7 +67,6 @@ public class GameService {
     final String sessionId = UUID.randomUUID().toString();
     final GameSession session = new GameSession(sessionId, username);
 
-    // Generate first question
     final GameQuestion firstQuestion = generateQuestion(1);
     session.setCurrentQuestion(firstQuestion);
 
@@ -73,13 +80,11 @@ public class GameService {
       return null;
     }
 
-    // Check if answer is correct
     final boolean isCorrect = session.getCurrentQuestion().getCorrectCountry().equals(answer);
     if (isCorrect) {
       session.setScore(session.getScore() + 1);
     }
 
-    // Move to next question or finish game
     if (session.getQuestionNumber() >= 20) {
       finishGame(session);
     } else {
@@ -94,37 +99,31 @@ public class GameService {
 
   private void finishGame(final GameSession session) {
     session.setFinished(true);
-    session.setEndTime(System.currentTimeMillis());
+    session.setEndTime(Instant.now());
 
-    // Add to leaderboard
-    final long timeElapsed = session.getEndTime() - session.getStartTime();
+    final Duration timeElapsed = Duration.between(session.getStartTime(), session.getEndTime());
     final LeaderboardEntry entry =
         new LeaderboardEntry(
             session.getUsername(), session.getScore(), timeElapsed, LocalDateTime.now());
     leaderboard.add(entry);
 
-    // Sort leaderboard by score (desc) then by time (asc)
     leaderboard.sort(
         (a, b) -> {
           final int scoreCompare = Integer.compare(b.getScore(), a.getScore());
           if (scoreCompare == 0) {
-            return Long.compare(a.getTimeElapsed(), b.getTimeElapsed());
+            return Long.compare(a.getTimeElapsed().toMillis(), b.getTimeElapsed().toMillis());
           }
           return scoreCompare;
         });
 
-    // Remove session from active sessions
     activeSessions.remove(session.getSessionId());
   }
 
   private GameQuestion generateQuestion(final int questionNumber) {
-    final Random random = new Random();
-
-    // Select correct country
-    final String correctCountry = countries.get(random.nextInt(countries.size()));
+    final String correctCountry =
+        countries.get(ThreadLocalRandom.current().nextInt(countries.size()));
     final String flagUrl = countryFlags.get(correctCountry);
 
-    // Generate 3 wrong options
     final List<String> options = new ArrayList<>();
     options.add(correctCountry);
 
@@ -132,13 +131,13 @@ public class GameService {
     availableCountries.remove(correctCountry);
 
     for (int i = 0; i < 3; i++) {
-      final String wrongCountry = availableCountries.get(random.nextInt(availableCountries.size()));
+      final String wrongCountry =
+          availableCountries.get(ThreadLocalRandom.current().nextInt(availableCountries.size()));
       options.add(wrongCountry);
       availableCountries.remove(wrongCountry);
     }
 
-    // Shuffle options
-    Collections.shuffle(options);
+    shuffle(options);
 
     return new GameQuestion(flagUrl, correctCountry, options, questionNumber);
   }
@@ -149,12 +148,12 @@ public class GameService {
             (a, b) -> {
               final int scoreCompare = Integer.compare(b.getScore(), a.getScore());
               if (scoreCompare == 0) {
-                return Long.compare(a.getTimeElapsed(), b.getTimeElapsed());
+                return Long.compare(a.getTimeElapsed().toMillis(), b.getTimeElapsed().toMillis());
               }
               return scoreCompare;
             })
-        .limit(50) // Top 50 entries
-        .collect(Collectors.toList());
+        .limit(50)
+        .collect(toList());
   }
 
   public GameSession getSession(final String sessionId) {

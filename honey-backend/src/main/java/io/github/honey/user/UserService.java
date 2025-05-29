@@ -1,11 +1,12 @@
-package io.github.honey;
+package io.github.honey.user;
 
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 import org.springframework.stereotype.Service;
 
 @Service
-public class UserService {
+public final class UserService {
+
   private final Map<String, User> users = new ConcurrentHashMap<>();
 
   public User authenticate(final String username, final String password) {
@@ -18,8 +19,9 @@ public class UserService {
 
   public User registerUser(final String username, final String password) {
     if (users.containsKey(username)) {
-      return null; // User already exists
+      return null;
     }
+
     final User user = new User(username, password);
     users.put(username, user);
     return user;

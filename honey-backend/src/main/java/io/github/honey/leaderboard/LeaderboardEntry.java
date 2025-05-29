@@ -1,11 +1,12 @@
-package io.github.honey;
+package io.github.honey.leaderboard;
 
+import java.time.Duration;
 import java.time.LocalDateTime;
 
-public class LeaderboardEntry {
+public final class LeaderboardEntry {
   private String username;
   private int score;
-  private long timeElapsed;
+  private Duration timeElapsed;
   private LocalDateTime completedAt;
 
   public LeaderboardEntry() {}
@@ -13,7 +14,7 @@ public class LeaderboardEntry {
   public LeaderboardEntry(
       final String username,
       final int score,
-      final long timeElapsed,
+      final Duration timeElapsed,
       final LocalDateTime completedAt) {
     this.username = username;
     this.score = score;
@@ -21,7 +22,6 @@ public class LeaderboardEntry {
     this.completedAt = completedAt;
   }
 
-  // Getters and setters
   public String getUsername() {
     return username;
   }
@@ -38,11 +38,11 @@ public class LeaderboardEntry {
     this.score = score;
   }
 
-  public long getTimeElapsed() {
+  public Duration getTimeElapsed() {
     return timeElapsed;
   }
 
-  public void setTimeElapsed(final long timeElapsed) {
+  public void setTimeElapsed(final Duration timeElapsed) {
     this.timeElapsed = timeElapsed;
   }
 

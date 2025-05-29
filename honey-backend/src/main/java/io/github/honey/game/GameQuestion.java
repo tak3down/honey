@@ -1,4 +1,4 @@
-package io.github.honey;
+package io.github.honey.game;
 
 import java.util.List;
 
@@ -21,7 +21,6 @@ public class GameQuestion {
     this.questionNumber = questionNumber;
   }
 
-  // Getters and setters
   public String getFlagUrl() {
     return flagUrl;
   }

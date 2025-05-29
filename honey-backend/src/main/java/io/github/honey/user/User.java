@@ -1,12 +1,13 @@
-package io.github.honey;
+package io.github.honey.user;
 
-public class AuthRequest {
+public final class User {
   private String username;
   private String password;
+  private String currentSessionId;
 
-  public AuthRequest() {}
+  public User() {}
 
-  public AuthRequest(final String username, final String password) {
+  public User(final String username, final String password) {
     this.username = username;
     this.password = password;
   }
@@ -25,5 +26,13 @@ public class AuthRequest {
 
   public void setPassword(final String password) {
     this.password = password;
+  }
+
+  public String getCurrentSessionId() {
+    return currentSessionId;
+  }
+
+  public void setCurrentSessionId(final String currentSessionId) {
+    this.currentSessionId = currentSessionId;
   }
 }

@@ -1,15 +1,24 @@
-package io.github.honey;
+package io.github.honey.auth;
 
-import org.springframework.beans.factory.annotation.Autowired;
+import io.github.honey.user.User;
+import io.github.honey.user.UserService;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequestMapping("/api/auth")
 @CrossOrigin(origins = "http://localhost:3000")
 public class AuthController {
 
-  @Autowired private UserService userService;
+  private final UserService userService;
+
+  public AuthController(final UserService userService) {
+    this.userService = userService;
+  }
 
   @PostMapping("/login")
   public ResponseEntity<?> login(@RequestBody final AuthRequest request) {

@@ -1,6 +1,6 @@
-package io.github.honey;
+package io.github.honey.game;
 
-public class GameStartRequest {
+public final class GameStartRequest {
   private String username;
 
   public GameStartRequest() {}
