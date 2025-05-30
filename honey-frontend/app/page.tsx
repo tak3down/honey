@@ -175,35 +175,36 @@ export default function FlagGame() {
                     </div>
                 </div>
 
-                <div className="flex items-center space-x-6">
+                <div className="flex items-center space-x-6 flex space-x-3">
+                    <button
+                        onClick={() => setCurrentPage('menu')}
+                        className="text-slate-300 hover:text-white px-3 py-2 rounded-lg hover:bg-slate-700/50 transition-all duration-200"
+                    >
+                        Strona główna
+                    </button>
+                    <button
+                        onClick={() => loadLeaderboard()}
+                        className="text-slate-300 hover:text-white px-3 py-2 rounded-lg hover:bg-slate-700/50 transition-all duration-200"
+                    >
+                        Topki
+                    </button>
+
                     {user && (<>
-                        <div className="flex space-x-3">
-                            <button
-                                onClick={() => setCurrentPage('menu')}
-                                className="text-slate-300 hover:text-white px-3 py-2 rounded-lg hover:bg-slate-700/50 transition-all duration-200"
-                            >
-                                Strona główna
-                            </button>
-                            <button
-                                onClick={() => loadLeaderboard()}
-                                className="text-slate-300 hover:text-white px-3 py-2 rounded-lg hover:bg-slate-700/50 transition-all duration-200"
-                            >
-                                Topki
-                            </button>
-                            <button
-                                onClick={logout}
-                                className="bg-red-600/20 text-red-400 hover:bg-red-600/30 hover:text-red-300 px-4 py-2 rounded-lg transition-all duration-200 border border-red-600/30"
-                            >
-                                Wyloguj się
-                            </button>
-                        </div>
+                        <button
+                            onClick={logout}
+                            className="bg-red-600/20 text-red-400 hover:bg-red-600/30 hover:text-red-300 px-4 py-2 rounded-lg transition-all duration-200 border border-red-600/30"
+                        >
+                            Wyloguj się
+                        </button>
                     </>)}
+
                     {!user && currentPage !== 'auth' && (<button
                         onClick={() => setCurrentPage('auth')}
                         className="bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white px-6 py-2 rounded-lg font-medium transition-all duration-200 shadow-lg"
                     >
                         Zaloguj się
                     </button>)}
+
                 </div>
             </div>
         </div>
