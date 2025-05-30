@@ -29,36 +29,36 @@ public final class GameService {
   }
 
   private void initializeCountryData() {
-    countryFlags.put("United States", "https://flagcdn.com/w320/us.png");
-    countryFlags.put("United Kingdom", "https://flagcdn.com/w320/gb.png");
-    countryFlags.put("Germany", "https://flagcdn.com/w320/de.png");
-    countryFlags.put("France", "https://flagcdn.com/w320/fr.png");
-    countryFlags.put("Italy", "https://flagcdn.com/w320/it.png");
-    countryFlags.put("Spain", "https://flagcdn.com/w320/es.png");
-    countryFlags.put("Canada", "https://flagcdn.com/w320/ca.png");
+    countryFlags.put("Stany Zjednoczone", "https://flagcdn.com/w320/us.png");
+    countryFlags.put("Wielka Brytania", "https://flagcdn.com/w320/gb.png");
+    countryFlags.put("Niemcy", "https://flagcdn.com/w320/de.png");
+    countryFlags.put("Francja", "https://flagcdn.com/w320/fr.png");
+    countryFlags.put("Włochy", "https://flagcdn.com/w320/it.png");
+    countryFlags.put("Hiszpania", "https://flagcdn.com/w320/es.png");
+    countryFlags.put("Kanada", "https://flagcdn.com/w320/ca.png");
     countryFlags.put("Australia", "https://flagcdn.com/w320/au.png");
-    countryFlags.put("Japan", "https://flagcdn.com/w320/jp.png");
-    countryFlags.put("China", "https://flagcdn.com/w320/cn.png");
-    countryFlags.put("Brazil", "https://flagcdn.com/w320/br.png");
-    countryFlags.put("India", "https://flagcdn.com/w320/in.png");
-    countryFlags.put("Russia", "https://flagcdn.com/w320/ru.png");
-    countryFlags.put("Mexico", "https://flagcdn.com/w320/mx.png");
-    countryFlags.put("Poland", "https://flagcdn.com/w320/pl.png");
-    countryFlags.put("Sweden", "https://flagcdn.com/w320/se.png");
-    countryFlags.put("Norway", "https://flagcdn.com/w320/no.png");
-    countryFlags.put("Netherlands", "https://flagcdn.com/w320/nl.png");
-    countryFlags.put("Belgium", "https://flagcdn.com/w320/be.png");
-    countryFlags.put("Switzerland", "https://flagcdn.com/w320/ch.png");
+    countryFlags.put("Japonia", "https://flagcdn.com/w320/jp.png");
+    countryFlags.put("Chiny", "https://flagcdn.com/w320/cn.png");
+    countryFlags.put("Brazylia", "https://flagcdn.com/w320/br.png");
+    countryFlags.put("Indie", "https://flagcdn.com/w320/in.png");
+    countryFlags.put("Rosja", "https://flagcdn.com/w320/ru.png");
+    countryFlags.put("Meksyk", "https://flagcdn.com/w320/mx.png");
+    countryFlags.put("Polska", "https://flagcdn.com/w320/pl.png");
+    countryFlags.put("Szwecja", "https://flagcdn.com/w320/se.png");
+    countryFlags.put("Norwegia", "https://flagcdn.com/w320/no.png");
+    countryFlags.put("Holandia", "https://flagcdn.com/w320/nl.png");
+    countryFlags.put("Belgia", "https://flagcdn.com/w320/be.png");
+    countryFlags.put("Szwajcaria", "https://flagcdn.com/w320/ch.png");
     countryFlags.put("Austria", "https://flagcdn.com/w320/at.png");
-    countryFlags.put("Portugal", "https://flagcdn.com/w320/pt.png");
-    countryFlags.put("Greece", "https://flagcdn.com/w320/gr.png");
-    countryFlags.put("Turkey", "https://flagcdn.com/w320/tr.png");
-    countryFlags.put("Egypt", "https://flagcdn.com/w320/eg.png");
-    countryFlags.put("South Africa", "https://flagcdn.com/w320/za.png");
-    countryFlags.put("Argentina", "https://flagcdn.com/w320/ar.png");
+    countryFlags.put("Portugalia", "https://flagcdn.com/w320/pt.png");
+    countryFlags.put("Grecja", "https://flagcdn.com/w320/gr.png");
+    countryFlags.put("Turcja", "https://flagcdn.com/w320/tr.png");
+    countryFlags.put("Egipt", "https://flagcdn.com/w320/eg.png");
+    countryFlags.put("RPA", "https://flagcdn.com/w320/za.png");
+    countryFlags.put("Argentyna", "https://flagcdn.com/w320/ar.png");
     countryFlags.put("Chile", "https://flagcdn.com/w320/cl.png");
-    countryFlags.put("Colombia", "https://flagcdn.com/w320/co.png");
-    countryFlags.put("South Korea", "https://flagcdn.com/w320/kr.png");
+    countryFlags.put("Kolumbia", "https://flagcdn.com/w320/co.png");
+    countryFlags.put("Korea Południowa", "https://flagcdn.com/w320/kr.png");
 
     countries.addAll(countryFlags.keySet());
   }

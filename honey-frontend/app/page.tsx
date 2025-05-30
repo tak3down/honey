@@ -322,7 +322,7 @@ export default function FlagGame() {
                                 </div>
                             </div>
                             <div className="text-right">
-                                <div className="text-2xl font-bold text-white">Score: {score}</div>
+                                <div className="text-2xl font-bold text-white">Wynik: {score}</div>
                                 <div
                                     className="text-slate-400">Trafność: {Math.round((score / currentQuestion.questionNumber) * 100)}%
                                 </div>
