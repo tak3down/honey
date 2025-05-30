@@ -3,7 +3,6 @@ package io.github.honey.game;
 import io.github.honey.leaderboard.LeaderboardEntry;
 import io.github.honey.user.UserService;
 import java.util.List;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.ResponseEntity;
@@ -41,15 +40,6 @@ public class GameController {
       return ResponseEntity.badRequest().body("Invalid session");
     }
     return ResponseEntity.ok(session);
-  }
-
-  @PostMapping("/game/invalidate")
-  public ResponseEntity<?> invalidateSession(@RequestParam final String sessionId) {
-    if (!gameService.invalidateSession(sessionId)) {
-      return ResponseEntity.badRequest().body("Session doesn't exist");
-    }
-    log.info("invalidated session: {}", sessionId);
-    return ResponseEntity.ok().build();
   }
 
   @GetMapping("/ranking")

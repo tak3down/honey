@@ -114,10 +114,8 @@ public final class GameService {
           }
           return scoreCompare;
         });
-  }
 
-  public boolean invalidateSession(final String sessionId) {
-    return activeSessions.remove(sessionId) != null;
+    activeSessions.remove(session.getSessionId());
   }
 
   private GameQuestion generateQuestion(final int questionNumber) {
