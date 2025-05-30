@@ -110,16 +110,22 @@ export default function FlagGame() {
                 const updatedSession = await response.json();
 
                 setTimeout(() => {
+                    setGameSession(updatedSession);
+                    setSelectedAnswer(null);
+                    setShowResult(false);
+
                     if (updatedSession.isFinished) {
-                        setGameSession(updatedSession);
+                        alert('koniec gry ->>>')
                         loadLeaderboard(true); // Load leaderboard to determine user rank
                         setCurrentPage('results');
-                    } else {
-                        setGameSession(updatedSession);
-                        setSelectedAnswer(null);
-                        setShowResult(false);
+
+                        fetch(`${API_BASE}/game/invalidate`, {
+                            method: 'POST', headers: {'Content-Type': 'application/json'}, body: updatedSession.sessionId
+                        })
                     }
                 }, 1500);
+            } else {
+                alert('Nie udało się przesłać odpowiedzi ' + response);
             }
         } catch (error) {
             alert('Nie udało się przesłać odpowiedzi');
@@ -142,6 +148,8 @@ export default function FlagGame() {
                 if (!silent) {
                     setCurrentPage('ranking');
                 }
+            } else {
+                alert('Nie udało się załadować tablicy wyników ' + response);
             }
         } catch (error) {
             if (!silent) {
@@ -319,7 +327,7 @@ export default function FlagGame() {
                             <div className="flex items-center space-x-4">
                                 <div
                                     className="bg-gradient-to-r from-yellow-600 to-orange-600 text-white px-4 py-2 rounded-lg font-bold">
-                                    Pytanie {currentQuestion.questionNumber} / 20
+                                    Pytanie {currentQuestion.questionNumber} / 10
                                 </div>
                             </div>
                             <div className="text-right">
@@ -335,7 +343,7 @@ export default function FlagGame() {
                             <div className="bg-slate-700/50 rounded-full h-3">
                                 <div
                                     className="bg-gradient-to-r from-yellow-500 to-orange-500 h-3 rounded-full transition-all duration-500"
-                                    style={{width: `${(currentQuestion.questionNumber / 20) * 100}%`}}
+                                    style={{width: `${(currentQuestion.questionNumber / 10) * 100}%`}}
                                 ></div>
                             </div>
                         </div>
@@ -387,10 +395,14 @@ export default function FlagGame() {
     };
 
     const renderResults = () => {
-        if (!gameSession) return null;
+        if (!gameSession) {
+            alert('game session is null');
+            return null;
+        }
+        alert('game session isnt null');
 
         const timeElapsed = Date.now() - gameSession.startTime;
-        const accuracy = Math.round((gameSession.score / 20) * 100);
+        const accuracy = Math.round((gameSession.score / 10) * 100);
 
         return (<div className="min-h-screen bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900">
             <Navbar/>
@@ -414,7 +426,7 @@ export default function FlagGame() {
                             className="bg-gradient-to-r from-slate-700/50 to-slate-800/50 rounded-2xl p-6 border border-slate-600/50 mb-6">
                             <div
                                 className="text-6xl font-bold bg-gradient-to-r from-emerald-400 to-teal-400 bg-clip-text text-transparent mb-2">
-                                {gameSession.score}/20
+                                {gameSession.score}/10
                             </div>
                             <div className="text-slate-300 text-xl mb-2">
                                 Czas: {formatTime(timeElapsed)}
@@ -499,11 +511,11 @@ export default function FlagGame() {
                                         </div>
                                     </div>
                                     <div className="text-right">
-                                        <div className="text-2xl font-bold text-emerald-400">{entry.score}/20</div>
+                                        <div className="text-2xl font-bold text-emerald-400">{entry.score}/10</div>
                                         <div
                                             className="text-sm text-slate-400">{formatTime(entry.timeElapsed)}</div>
                                         <div
-                                            className="text-xs text-slate-500">{Math.round((entry.score / 20) * 100)}%
+                                            className="text-xs text-slate-500">{Math.round((entry.score / 10) * 100)}%
                                             trafności
                                         </div>
                                     </div>

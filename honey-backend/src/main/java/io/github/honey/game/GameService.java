@@ -14,10 +14,14 @@ import java.util.Map;
 import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ThreadLocalRandom;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
 @Service
 public final class GameService {
+
   private final Map<String, GameSession> activeSessions = new ConcurrentHashMap<>();
   private final List<LeaderboardEntry> leaderboard = new ArrayList<>();
 
@@ -76,7 +80,7 @@ public final class GameService {
 
   public GameSession submitAnswer(final String sessionId, final String answer) {
     final GameSession session = activeSessions.get(sessionId);
-    if (session == null || session.isFinished()) {
+    if (session == null) { // || session.isFinished()
       return null;
     }
 
@@ -85,7 +89,7 @@ public final class GameService {
       session.setScore(session.getScore() + 1);
     }
 
-    if (session.getQuestionNumber() >= 20) {
+    if (session.getQuestionNumber() >= 10) {
       finishGame(session);
     } else {
       final int nextQuestionNumber = session.getQuestionNumber() + 1;
@@ -115,8 +119,10 @@ public final class GameService {
           }
           return scoreCompare;
         });
+  }
 
-    activeSessions.remove(session.getSessionId());
+  public boolean invalidateSession(final String sessionId) {
+    return activeSessions.remove(sessionId) != null;
   }
 
   private GameQuestion generateQuestion(final int questionNumber) {

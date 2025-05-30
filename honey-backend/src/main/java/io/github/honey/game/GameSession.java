@@ -19,7 +19,7 @@ public final class GameSession {
     this.sessionId = sessionId;
     this.username = username;
     this.score = 0;
-    this.totalQuestions = 20;
+    this.totalQuestions = 10;
     this.startTime = Instant.now();
     this.isFinished = false;
     this.questionNumber = 1;
