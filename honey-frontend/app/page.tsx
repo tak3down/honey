@@ -123,6 +123,8 @@ export default function FlagGame() {
                         fetch(`${API_BASE}/game/invalidate`, {
                             method: 'POST', headers: {'Content-Type': 'application/json'}, body: updatedSession.sessionId
                         })
+                    } else {
+                        alert('jeszcze nie ma końca');
                     }
                 }, 1500);
             } else {
