@@ -116,7 +116,9 @@ export default function FlagGame() {
                         setGameSession(updatedSession);
                         loadLeaderboard(true); // Load leaderboard to determine user rank
                         setCurrentPage('results');
+
                     } else {
+
                         setGameSession(updatedSession);
                         setSelectedAnswer(null);
                         setShowResult(false);
@@ -181,7 +183,7 @@ export default function FlagGame() {
                     </div>
                 </div>
 
-                <div className="flex items-center space-x-3">
+                <div className="flex items-center space-x-6 flex space-x-3">
                     <button
                         onClick={() => setCurrentPage('menu')}
                         className="text-slate-300 hover:text-white px-3 py-2 rounded-lg hover:bg-slate-700/50 transition-all duration-200"
@@ -311,7 +313,7 @@ export default function FlagGame() {
     const renderGame = () => {
         if (!gameSession) return null;
 
-        const {currentQuestion, score} = gameSession;
+        const {currentQuestion, score, totalQuestions} = gameSession;
         const isCorrect = selectedAnswer === currentQuestion.correctCountry;
 
         return (<div className="min-h-screen bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900">
