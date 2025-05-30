@@ -218,7 +218,7 @@ export default function FlagGame() {
                 <div className="text-center mb-12">
                     <div className="text-6xl mb-4">🌍</div>
                     <h2 className="text-4xl font-bold bg-gradient-to-r from-yellow-400 to-orange-400 bg-clip-text text-transparent mb-4">
-                        Honey (miodek)
+                        Honey
                     </h2>
                     <p className="text-slate-400 text-lg">Sprawdź swoją wiedzę geograficzną z flagami z całego świata</p>
                 </div>
@@ -238,7 +238,7 @@ export default function FlagGame() {
 
                     <button
                         onClick={() => loadLeaderboard()}
-                        className="w-full bg-gradient-to-r from-yellow-600 to-indigo-600 hover:from-yellow-700 hover:to-indigo-700 text-white font-bold py-4 px-8 rounded-xl transition-all duration-200 shadow-lg transform hover:scale-105"
+                        className="w-full bg-gradient-to-r from-yellow-600 to-amber-600 hover:from-yellow-700 hover:to-amber-700 text-white font-bold py-4 px-8 rounded-xl transition-all duration-200 shadow-lg transform hover:scale-105"
                     >
                         🏆 Zobacz Topki
                     </button>
@@ -437,7 +437,7 @@ export default function FlagGame() {
                     <div className="space-y-4">
                         <button
                             onClick={() => loadLeaderboard()}
-                            className="w-full bg-gradient-to-r from-yellow-600 to-indigo-600 hover:from-yellow-700 hover:to-indigo-700 text-white font-bold py-4 px-8 rounded-xl transition-all duration-200 shadow-lg transform hover:scale-105"
+                            className="w-full bg-gradient-to-r from-yellow-600 to-amber-600 hover:from-yellow-700 hover:to-amber-700 text-white font-bold py-4 px-8 rounded-xl transition-all duration-200 shadow-lg transform hover:scale-105"
                         >
                             🏆 Wyświetl Topki
                         </button>
@@ -504,7 +504,7 @@ export default function FlagGame() {
                                             className="text-sm text-slate-400">{formatTime(entry.timeElapsed)}</div>
                                         <div
                                             className="text-xs text-slate-500">{Math.round((entry.score / 20) * 100)}%
-                                            accuracy
+                                            trafności
                                         </div>
                                     </div>
                                 </div>);
