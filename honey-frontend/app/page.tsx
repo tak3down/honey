@@ -60,10 +60,10 @@ export default function FlagGame() {
                 setUser(userData);
                 setCurrentPage('menu');
             } else {
-                alert(isLogin ? 'Invalid credentials' : 'Username already exists');
+                alert(isLogin ? 'Nieprawidłowe dane logowania' : 'Nazwa użytkownika już istnieje');
             }
         } catch (error) {
-            alert('Authentication failed');
+            alert('Autoryzacja nie powiodła się');
         }
         setLoading(false);
     };
@@ -88,7 +88,7 @@ export default function FlagGame() {
                 setCurrentPage('game');
             }
         } catch (error) {
-            alert('Failed to start game');
+            alert('Nie udało się uruchomić gry');
         }
         setLoading(false);
     };
@@ -122,7 +122,7 @@ export default function FlagGame() {
                 }, 1500);
             }
         } catch (error) {
-            alert('Failed to submit answer');
+            alert('Nie udało się przesłać odpowiedzi');
         }
     };
 
@@ -145,7 +145,7 @@ export default function FlagGame() {
             }
         } catch (error) {
             if (!silent) {
-                alert('Failed to load leaderboard');
+                alert('Nie udało się załadować tablicy wyników');
             }
         }
     };
@@ -171,31 +171,30 @@ export default function FlagGame() {
             <div className="flex justify-between items-center h-16">
                 <div className="flex items-center space-x-4">
                     <div className="bg-gradient-to-r from-blue-500 to-purple-600 bg-clip-text text-transparent">
-                        <h1 className="text-2xl font-bold tracking-wide">🏴 Flag Master</h1>
+                        <h1 className="text-2xl font-bold tracking-wide">🏴 Honey (miodek)</h1>
                     </div>
                 </div>
 
                 <div className="flex items-center space-x-6">
                     {user && (<>
-                        <span className="text-slate-300 font-medium">Welcome, {user.username}</span>
                         <div className="flex space-x-3">
                             <button
                                 onClick={() => setCurrentPage('menu')}
                                 className="text-slate-300 hover:text-white px-3 py-2 rounded-lg hover:bg-slate-700/50 transition-all duration-200"
                             >
-                                Home
+                                Strona główna
                             </button>
                             <button
                                 onClick={() => loadLeaderboard()}
                                 className="text-slate-300 hover:text-white px-3 py-2 rounded-lg hover:bg-slate-700/50 transition-all duration-200"
                             >
-                                Leaderboard
+                                Topki
                             </button>
                             <button
                                 onClick={logout}
                                 className="bg-red-600/20 text-red-400 hover:bg-red-600/30 hover:text-red-300 px-4 py-2 rounded-lg transition-all duration-200 border border-red-600/30"
                             >
-                                Logout
+                                Wyloguj się
                             </button>
                         </div>
                     </>)}
@@ -203,7 +202,7 @@ export default function FlagGame() {
                         onClick={() => setCurrentPage('auth')}
                         className="bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white px-6 py-2 rounded-lg font-medium transition-all duration-200 shadow-lg"
                     >
-                        Sign In
+                        Zaloguj się
                     </button>)}
                 </div>
             </div>
@@ -218,10 +217,9 @@ export default function FlagGame() {
                 <div className="text-center mb-12">
                     <div className="text-6xl mb-4">🌍</div>
                     <h2 className="text-4xl font-bold bg-gradient-to-r from-blue-400 to-purple-400 bg-clip-text text-transparent mb-4">
-                        Flag Quiz Challenge
+                        Honey (miodek), projekt na informatykę.
                     </h2>
-                    <p className="text-slate-400 text-lg">Test your geography knowledge with flags from around the
-                        world</p>
+                    <p className="text-slate-400 text-lg">Sprawdź swoją wiedzę geograficzną z flagami z całego świata</p>
                 </div>
 
                 <div className="space-y-4">
@@ -234,14 +232,14 @@ export default function FlagGame() {
                             <div
                                 className="w-5 h-5 border-2 border-white border-t-transparent rounded-full animate-spin"></div>
                             <span>Loading...</span>
-                        </div>) : ('🎮 START GAME')}
+                        </div>) : ('🎮 Zacznij Grę')}
                     </button>
 
                     <button
                         onClick={() => loadLeaderboard()}
                         className="w-full bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 text-white font-bold py-4 px-8 rounded-xl transition-all duration-200 shadow-lg transform hover:scale-105"
                     >
-                        🏆 VIEW LEADERBOARD
+                        🏆 Zobacz Topki
                     </button>
                 </div>
             </div>
@@ -255,10 +253,10 @@ export default function FlagGame() {
                 className="bg-gradient-to-br from-slate-800/50 to-slate-900/50 backdrop-blur-xl rounded-2xl shadow-2xl border border-slate-700/50 p-10 max-w-md w-full">
                 <div className="text-center mb-8">
                     <h2 className="text-3xl font-bold text-white mb-2">
-                        {isLogin ? 'Welcome Back' : 'Join Flag Master'}
+                        {isLogin ? 'Witaj Ponownie' : 'Załóż konto'}
                     </h2>
                     <p className="text-slate-400">
-                        {isLogin ? 'Sign in to continue your journey' : 'Create your account to start playing'}
+                        {isLogin ? 'Zaloguj się, aby zagrać!' : 'Stwórz konto, aby zagrać!'}
                     </p>
                 </div>
 
@@ -266,7 +264,7 @@ export default function FlagGame() {
                     <div>
                         <input
                             type="text"
-                            placeholder="Username"
+                            placeholder="Nazwa użytkownika"
                             value={username}
                             onChange={(e) => setUsername(e.target.value)}
                             className="w-full px-4 py-3 bg-slate-700/50 border border-slate-600/50 rounded-xl text-white placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200"
@@ -276,7 +274,7 @@ export default function FlagGame() {
                     <div>
                         <input
                             type="password"
-                            placeholder="Password"
+                            placeholder="Hasło"
                             value={password}
                             onChange={(e) => setPassword(e.target.value)}
                             className="w-full px-4 py-3 bg-slate-700/50 border border-slate-600/50 rounded-xl text-white placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200"
@@ -288,14 +286,14 @@ export default function FlagGame() {
                         disabled={loading || !username || !password}
                         className="w-full bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white font-bold py-3 px-6 rounded-xl transition-all duration-200 shadow-lg disabled:opacity-50 disabled:cursor-not-allowed"
                     >
-                        {loading ? 'Processing...' : (isLogin ? 'Sign In' : 'Create Account')}
+                        {loading ? 'Ładowanie...' : (isLogin ? 'Zaloguj Się' : 'Stwórz konto')}
                     </button>
 
                     <button
                         onClick={() => setIsLogin(!isLogin)}
                         className="w-full text-slate-400 hover:text-white font-medium transition-colors duration-200"
                     >
-                        {isLogin ? "Don't have an account? Sign up" : 'Already have an account? Sign in'}
+                        {isLogin ? "Nie masz jeszcze konta? Załóż je!" : 'Posiadasz już konto? Zaloguj się'}
                     </button>
                 </div>
             </div>
@@ -320,13 +318,13 @@ export default function FlagGame() {
                             <div className="flex items-center space-x-4">
                                 <div
                                     className="bg-gradient-to-r from-blue-600 to-purple-600 text-white px-4 py-2 rounded-lg font-bold">
-                                    Question {currentQuestion.questionNumber} / 20
+                                    Pytanie {currentQuestion.questionNumber} / 20
                                 </div>
                             </div>
                             <div className="text-right">
                                 <div className="text-2xl font-bold text-white">Score: {score}</div>
                                 <div
-                                    className="text-slate-400">Accuracy: {Math.round((score / currentQuestion.questionNumber) * 100)}%
+                                    className="text-slate-400">Trafność: {Math.round((score / currentQuestion.questionNumber) * 100)}%
                                 </div>
                             </div>
                         </div>
@@ -347,11 +345,11 @@ export default function FlagGame() {
                                 className="inline-block bg-gradient-to-br from-slate-700/50 to-slate-800/50 p-4 rounded-2xl border border-slate-600/50 shadow-xl">
                                 <img
                                     src={currentQuestion.flagUrl}
-                                    alt="Country flag"
+                                    alt="Flaga państwa"
                                     className="w-80 h-52 object-cover rounded-xl shadow-lg"
                                 />
                             </div>
-                            <p className="text-slate-300 mt-4 text-lg">Which country does this flag belong to?</p>
+                            <p className="text-slate-300 mt-4 text-lg">Do jakiego kraju należy ta flaga?</p>
                         </div>
 
                         {/* Answer Options */}
@@ -405,7 +403,7 @@ export default function FlagGame() {
                             {accuracy >= 90 ? '🏆' : accuracy >= 70 ? '🥈' : accuracy >= 50 ? '🥉' : '📊'}
                         </div>
                         <h2 className="text-4xl font-bold bg-gradient-to-r from-blue-400 to-purple-400 bg-clip-text text-transparent mb-2">
-                            Game Complete!
+                            Koniec Gry!
                         </h2>
                     </div>
 
@@ -418,10 +416,10 @@ export default function FlagGame() {
                                 {gameSession.score}/20
                             </div>
                             <div className="text-slate-300 text-xl mb-2">
-                                Time: {formatTime(timeElapsed)}
+                                Czas: {formatTime(timeElapsed)}
                             </div>
                             <div className="text-slate-400 text-lg">
-                                Accuracy: {accuracy}%
+                                Trafność: {accuracy}%
                             </div>
                         </div>
 
@@ -429,7 +427,7 @@ export default function FlagGame() {
                         {userRank && (<div
                             className="bg-gradient-to-r from-blue-600/20 to-purple-600/20 border border-blue-500/30 rounded-xl p-4 mb-6">
                             <div className="text-lg text-blue-300 font-semibold">
-                                🎯 Your Global Rank: #{userRank}
+                                🎯 Twoja Pozycja: #{userRank}
                             </div>
                         </div>)}
                     </div>
@@ -440,21 +438,21 @@ export default function FlagGame() {
                             onClick={() => loadLeaderboard()}
                             className="w-full bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 text-white font-bold py-4 px-8 rounded-xl transition-all duration-200 shadow-lg transform hover:scale-105"
                         >
-                            🏆 View Full Leaderboard
+                            🏆 Wyświetl Topki
                         </button>
 
                         <button
                             onClick={startGame}
                             className="w-full bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-700 hover:to-teal-700 text-white font-bold py-4 px-8 rounded-xl transition-all duration-200 shadow-lg transform hover:scale-105"
                         >
-                            🎮 Play Again
+                            🎮 Graj Ponownie
                         </button>
 
                         <button
                             onClick={() => setCurrentPage('menu')}
                             className="w-full bg-gradient-to-r from-slate-600 to-slate-700 hover:from-slate-700 hover:to-slate-800 text-white font-bold py-4 px-8 rounded-xl transition-all duration-200 shadow-lg"
                         >
-                            🏠 Main Menu
+                            🏠 Strona Główna
                         </button>
                     </div>
                 </div>
@@ -471,9 +469,9 @@ export default function FlagGame() {
                         className="bg-gradient-to-br from-slate-800/50 to-slate-900/50 backdrop-blur-xl rounded-2xl shadow-2xl border border-slate-700/50 p-8">
                         <div className="text-center mb-8">
                             <h2 className="text-4xl font-bold bg-gradient-to-r from-yellow-400 to-orange-400 bg-clip-text text-transparent mb-2">
-                                🏆 Global Leaderboard
+                                🏆 Topki
                             </h2>
-                            <p className="text-slate-400">Top players from around the world</p>
+                            <p className="text-slate-400">Najlepsi gracze</p>
                         </div>
 
                         <div className="space-y-3">
@@ -492,7 +490,7 @@ export default function FlagGame() {
                                         <div>
                                             <div
                                                 className={`font-bold text-lg ${isCurrentUser ? 'text-blue-300' : 'text-white'}`}>
-                                                {entry.username} {isCurrentUser && '(You)'}
+                                                {entry.username} {isCurrentUser && '(Ty)'}
                                             </div>
                                             <div className="text-slate-400 text-sm">
                                                 {new Date(entry.completedAt).toLocaleDateString()}
@@ -514,7 +512,7 @@ export default function FlagGame() {
 
                         {leaderboard.length === 0 && (<div className="text-center py-12">
                             <div className="text-4xl mb-4">🎯</div>
-                            <p className="text-slate-400 text-lg">No games completed yet. Be the first!</p>
+                            <p className="text-slate-400 text-lg">Żadna gra nie została jeszcze ukończona. Bądź pierwszy!</p>
                         </div>)}
                     </div>
                 </div>
