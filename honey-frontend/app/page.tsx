@@ -114,18 +114,17 @@ export default function FlagGame() {
                     setSelectedAnswer(null);
                     setShowResult(false);
 
-                    if (updatedSession.isFinished) {
+                    if (gameSession.isFinished) {
                         alert('koniec gry ->>>');
 
                         loadLeaderboard(true); // Load leaderboard to determine user rank
                         setCurrentPage('results');
 
                         fetch(`${API_BASE}/game/invalidate`, {
-                            method: 'POST', headers: {'Content-Type': 'application/json'}, body: updatedSession.sessionId
+                            method: 'POST', headers: {'Content-Type': 'application/json'}, body: gameSession.sessionId
                         })
-                    } else {
-                        alert('jeszcze nie ma końca');
                     }
+                    log(JSON.stringify(gameSession));
                 }, 1500);
             } else {
                 alert('Nie udało się przesłać odpowiedzi ' + response);
@@ -399,10 +398,8 @@ export default function FlagGame() {
 
     const renderResults = () => {
         if (!gameSession) {
-            alert('game session is null');
             return null;
         }
-        alert('game session isnt null');
 
         const timeElapsed = Date.now() - gameSession.startTime;
         const accuracy = Math.round((gameSession.score / 10) * 100);
