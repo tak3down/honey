@@ -4,8 +4,6 @@ import static java.util.Collections.shuffle;
 import static java.util.stream.Collectors.toList;
 
 import io.github.honey.leaderboard.LeaderboardEntry;
-import java.time.Duration;
-import java.time.Instant;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -14,9 +12,6 @@ import java.util.Map;
 import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ThreadLocalRandom;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -103,9 +98,9 @@ public final class GameService {
 
   private void finishGame(final GameSession session) {
     session.setFinished(true);
-    session.setEndTime(Instant.now());
+    session.setEndTime(System.currentTimeMillis());
 
-    final Duration timeElapsed = Duration.between(session.getStartTime(), session.getEndTime());
+    final long timeElapsed = session.getEndTime() - session.getStartTime();
     final LeaderboardEntry entry =
         new LeaderboardEntry(
             session.getUsername(), session.getScore(), timeElapsed, LocalDateTime.now());

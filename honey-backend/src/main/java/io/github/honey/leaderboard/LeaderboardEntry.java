@@ -1,6 +1,5 @@
 package io.github.honey.leaderboard;
 
-import java.time.Duration;
 import java.time.LocalDateTime;
 
 public final class LeaderboardEntry {
@@ -14,12 +13,11 @@ public final class LeaderboardEntry {
   public LeaderboardEntry(
       final String username,
       final int score,
-      final Duration timeElapsed,
+      final long timeElapsed,
       final LocalDateTime completedAt) {
     this.username = username;
     this.score = score;
-    // have to convert cuz ts doesn't support java duration
-    this.timeElapsed = timeElapsed.toMillis();
+    this.timeElapsed = timeElapsed;
     this.completedAt = completedAt;
   }
 

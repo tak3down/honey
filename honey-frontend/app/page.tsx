@@ -20,7 +20,7 @@ interface GameSession {
     totalQuestions: number;
     startTime: number;
     currentQuestion: GameQuestion;
-    isFinished: boolean;
+    finished: boolean;
 }
 
 interface LeaderboardEntry {
@@ -107,24 +107,29 @@ export default function FlagGame() {
             });
 
             if (response.ok) {
-                const updatedSession = await response.json();
+                const updatedSession: GameSession = await response.json();
 
                 setTimeout(() => {
-                    setGameSession(updatedSession);
-                    setSelectedAnswer(null);
-                    setShowResult(false);
+                    console.log('updatedSession.finished:', updatedSession.finished);
+                    console.log('JSON representation:', JSON.stringify(updatedSession));
 
-                    if (gameSession.isFinished) {
-                        alert('koniec gry ->>>');
+                    if (updatedSession["finished"]) {
+                        console.log('koniec gry ->>>');
 
+                        setGameSession(updatedSession);
                         loadLeaderboard(true); // Load leaderboard to determine user rank
                         setCurrentPage('results');
 
                         fetch(`${API_BASE}/game/invalidate`, {
-                            method: 'POST', headers: {'Content-Type': 'application/json'}, body: gameSession.sessionId
+                            method: 'POST',
+                            headers: {'Content-Type': 'application/json'},
+                            body: updatedSession.sessionId
                         })
+                    } else {
+                        setGameSession(updatedSession);
+                        setSelectedAnswer(null);
+                        setShowResult(false);
                     }
-                    log(JSON.stringify(gameSession));
                 }, 1500);
             } else {
                 alert('Nie udało się przesłać odpowiedzi ' + response);
@@ -230,7 +235,8 @@ export default function FlagGame() {
                     <h2 className="text-4xl font-bold bg-gradient-to-r from-yellow-400 to-orange-400 bg-clip-text text-transparent mb-4">
                         Honey
                     </h2>
-                    <p className="text-slate-400 text-lg">Sprawdź swoją wiedzę geograficzną z flagami z całego świata</p>
+                    <p className="text-slate-400 text-lg">Sprawdź swoją wiedzę geograficzną z flagami z całego
+                        świata</p>
                 </div>
 
                 <div className="space-y-4">
@@ -525,7 +531,8 @@ export default function FlagGame() {
 
                         {leaderboard.length === 0 && (<div className="text-center py-12">
                             <div className="text-4xl mb-4">🎯</div>
-                            <p className="text-slate-400 text-lg">Żadna gra nie została jeszcze ukończona. Bądź pierwszy!</p>
+                            <p className="text-slate-400 text-lg">Żadna gra nie została jeszcze ukończona. Bądź
+                                pierwszy!</p>
                         </div>)}
                     </div>
                 </div>

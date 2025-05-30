@@ -1,14 +1,14 @@
 package io.github.honey.game;
 
-import java.time.Instant;
+import java.time.long;
 
 public final class GameSession {
   private String sessionId;
   private String username;
   private int score;
   private int totalQuestions;
-  private Instant startTime;
-  private Instant endTime;
+  private long startTime;
+  private long endTime;
   private boolean isFinished;
   private GameQuestion currentQuestion;
   private int questionNumber;
@@ -20,7 +20,7 @@ public final class GameSession {
     this.username = username;
     this.score = 0;
     this.totalQuestions = 10;
-    this.startTime = Instant.now();
+    this.startTime = System.currentTimeMillis();
     this.isFinished = false;
     this.questionNumber = 1;
   }
@@ -57,19 +57,19 @@ public final class GameSession {
     this.totalQuestions = totalQuestions;
   }
 
-  public Instant getStartTime() {
+  public long getStartTime() {
     return startTime;
   }
 
-  public void setStartTime(final Instant startTime) {
+  public void setStartTime(final long startTime) {
     this.startTime = startTime;
   }
 
-  public Instant getEndTime() {
+  public long getEndTime() {
     return endTime;
   }
 
-  public void setEndTime(final Instant endTime) {
+  public void setEndTime(final long endTime) {
     this.endTime = endTime;
   }
 
