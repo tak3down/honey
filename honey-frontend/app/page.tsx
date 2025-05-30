@@ -115,7 +115,8 @@ export default function FlagGame() {
                     setShowResult(false);
 
                     if (updatedSession.isFinished) {
-                        alert('koniec gry ->>>')
+                        alert('koniec gry ->>>');
+
                         loadLeaderboard(true); // Load leaderboard to determine user rank
                         setCurrentPage('results');
 
