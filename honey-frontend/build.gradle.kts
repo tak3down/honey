@@ -20,6 +20,7 @@ val buildTask = tasks.register<NpmTask>("buildFrontend") {
         "next.config.js",
         "next-env.d.ts",
         "tsconfig.json",
+        "favicon.ico",
         "postcss.config.js",
         "tailwind.config.js"
     )

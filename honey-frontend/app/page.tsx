@@ -170,8 +170,8 @@ export default function FlagGame() {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div className="flex justify-between items-center h-16">
                 <div className="flex items-center space-x-4">
-                    <div className="bg-gradient-to-r from-blue-500 to-purple-600 bg-clip-text text-transparent">
-                        <h1 className="text-2xl font-bold tracking-wide">🏴 Honey (miodek)</h1>
+                    <div className="bg-gradient-to-r from-yellow-500 to-orange-600 bg-clip-text text-transparent">
+                        <h1 className="text-2xl font-bold tracking-wide">Honey (miodek)</h1>
                     </div>
                 </div>
 
@@ -200,7 +200,7 @@ export default function FlagGame() {
 
                     {!user && currentPage !== 'auth' && (<button
                         onClick={() => setCurrentPage('auth')}
-                        className="bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white px-6 py-2 rounded-lg font-medium transition-all duration-200 shadow-lg"
+                        className="bg-gradient-to-r from-yellow-600 to-orange-600 hover:from-yellow-700 hover:to-orange-700 text-white px-6 py-2 rounded-lg font-medium transition-all duration-200 shadow-lg"
                     >
                         Zaloguj się
                     </button>)}
@@ -217,8 +217,8 @@ export default function FlagGame() {
                 className="bg-gradient-to-br from-slate-800/50 to-slate-900/50 backdrop-blur-xl rounded-2xl shadow-2xl border border-slate-700/50 p-12 max-w-lg w-full">
                 <div className="text-center mb-12">
                     <div className="text-6xl mb-4">🌍</div>
-                    <h2 className="text-4xl font-bold bg-gradient-to-r from-blue-400 to-purple-400 bg-clip-text text-transparent mb-4">
-                        Honey (miodek), projekt na informatykę.
+                    <h2 className="text-4xl font-bold bg-gradient-to-r from-yellow-400 to-orange-400 bg-clip-text text-transparent mb-4">
+                        Honey (miodek)
                     </h2>
                     <p className="text-slate-400 text-lg">Sprawdź swoją wiedzę geograficzną z flagami z całego świata</p>
                 </div>
@@ -238,7 +238,7 @@ export default function FlagGame() {
 
                     <button
                         onClick={() => loadLeaderboard()}
-                        className="w-full bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 text-white font-bold py-4 px-8 rounded-xl transition-all duration-200 shadow-lg transform hover:scale-105"
+                        className="w-full bg-gradient-to-r from-yellow-600 to-indigo-600 hover:from-yellow-700 hover:to-indigo-700 text-white font-bold py-4 px-8 rounded-xl transition-all duration-200 shadow-lg transform hover:scale-105"
                     >
                         🏆 Zobacz Topki
                     </button>
@@ -268,7 +268,7 @@ export default function FlagGame() {
                             placeholder="Nazwa użytkownika"
                             value={username}
                             onChange={(e) => setUsername(e.target.value)}
-                            className="w-full px-4 py-3 bg-slate-700/50 border border-slate-600/50 rounded-xl text-white placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200"
+                            className="w-full px-4 py-3 bg-slate-700/50 border border-slate-600/50 rounded-xl text-white placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-yellow-500 focus:border-transparent transition-all duration-200"
                         />
                     </div>
 
@@ -278,14 +278,14 @@ export default function FlagGame() {
                             placeholder="Hasło"
                             value={password}
                             onChange={(e) => setPassword(e.target.value)}
-                            className="w-full px-4 py-3 bg-slate-700/50 border border-slate-600/50 rounded-xl text-white placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200"
+                            className="w-full px-4 py-3 bg-slate-700/50 border border-slate-600/50 rounded-xl text-white placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-yellow-500 focus:border-transparent transition-all duration-200"
                         />
                     </div>
 
                     <button
                         onClick={authenticateUser}
                         disabled={loading || !username || !password}
-                        className="w-full bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white font-bold py-3 px-6 rounded-xl transition-all duration-200 shadow-lg disabled:opacity-50 disabled:cursor-not-allowed"
+                        className="w-full bg-gradient-to-r from-yellow-600 to-orange-600 hover:from-yellow-700 hover:to-orange-700 text-white font-bold py-3 px-6 rounded-xl transition-all duration-200 shadow-lg disabled:opacity-50 disabled:cursor-not-allowed"
                     >
                         {loading ? 'Ładowanie...' : (isLogin ? 'Zaloguj Się' : 'Stwórz konto')}
                     </button>
@@ -318,7 +318,7 @@ export default function FlagGame() {
                         <div className="flex justify-between items-center mb-8">
                             <div className="flex items-center space-x-4">
                                 <div
-                                    className="bg-gradient-to-r from-blue-600 to-purple-600 text-white px-4 py-2 rounded-lg font-bold">
+                                    className="bg-gradient-to-r from-yellow-600 to-orange-600 text-white px-4 py-2 rounded-lg font-bold">
                                     Pytanie {currentQuestion.questionNumber} / 20
                                 </div>
                             </div>
@@ -334,7 +334,7 @@ export default function FlagGame() {
                         <div className="mb-8">
                             <div className="bg-slate-700/50 rounded-full h-3">
                                 <div
-                                    className="bg-gradient-to-r from-blue-500 to-purple-500 h-3 rounded-full transition-all duration-500"
+                                    className="bg-gradient-to-r from-yellow-500 to-orange-500 h-3 rounded-full transition-all duration-500"
                                     style={{width: `${(currentQuestion.questionNumber / 20) * 100}%`}}
                                 ></div>
                             </div>
@@ -367,7 +367,7 @@ export default function FlagGame() {
                                         buttonClass += "bg-slate-700/30 text-slate-400 border-slate-600/30";
                                     }
                                 } else {
-                                    buttonClass += "bg-gradient-to-r from-slate-700/50 to-slate-800/50 hover:from-blue-600/50 hover:to-purple-600/50 text-white border-slate-600/50 hover:border-blue-500/50 shadow-lg";
+                                    buttonClass += "bg-gradient-to-r from-slate-700/50 to-slate-800/50 hover:from-yellow-600/50 hover:to-orange-600/50 text-white border-slate-600/50 hover:border-yellow-500/50 shadow-lg";
                                 }
 
                                 return (<button
@@ -403,7 +403,7 @@ export default function FlagGame() {
                         <div className="text-6xl mb-4">
                             {accuracy >= 90 ? '🏆' : accuracy >= 70 ? '🥈' : accuracy >= 50 ? '🥉' : '📊'}
                         </div>
-                        <h2 className="text-4xl font-bold bg-gradient-to-r from-blue-400 to-purple-400 bg-clip-text text-transparent mb-2">
+                        <h2 className="text-4xl font-bold bg-gradient-to-r from-yellow-400 to-orange-400 bg-clip-text text-transparent mb-2">
                             Koniec Gry!
                         </h2>
                     </div>
@@ -426,8 +426,8 @@ export default function FlagGame() {
 
                         {/* Rank Display */}
                         {userRank && (<div
-                            className="bg-gradient-to-r from-blue-600/20 to-purple-600/20 border border-blue-500/30 rounded-xl p-4 mb-6">
-                            <div className="text-lg text-blue-300 font-semibold">
+                            className="bg-gradient-to-r from-yellow-600/20 to-orange-600/20 border border-yellow-500/30 rounded-xl p-4 mb-6">
+                            <div className="text-lg text-yellow-300 font-semibold">
                                 🎯 Twoja Pozycja: #{userRank}
                             </div>
                         </div>)}
@@ -437,7 +437,7 @@ export default function FlagGame() {
                     <div className="space-y-4">
                         <button
                             onClick={() => loadLeaderboard()}
-                            className="w-full bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 text-white font-bold py-4 px-8 rounded-xl transition-all duration-200 shadow-lg transform hover:scale-105"
+                            className="w-full bg-gradient-to-r from-yellow-600 to-indigo-600 hover:from-yellow-700 hover:to-indigo-700 text-white font-bold py-4 px-8 rounded-xl transition-all duration-200 shadow-lg transform hover:scale-105"
                         >
                             🏆 Wyświetl Topki
                         </button>
@@ -481,7 +481,7 @@ export default function FlagGame() {
 
                                 return (<div
                                     key={index}
-                                    className={`flex justify-between items-center p-6 rounded-xl transition-all duration-200 border ${index === 0 ? 'bg-gradient-to-r from-yellow-600/20 to-amber-600/20 border-yellow-500/30' : index === 1 ? 'bg-gradient-to-r from-slate-600/20 to-slate-700/20 border-slate-400/30' : index === 2 ? 'bg-gradient-to-r from-orange-600/20 to-red-600/20 border-orange-500/30' : isCurrentUser ? 'bg-gradient-to-r from-blue-600/20 to-purple-600/20 border-blue-500/30' : 'bg-slate-700/20 border-slate-600/20'}`}
+                                    className={`flex justify-between items-center p-6 rounded-xl transition-all duration-200 border ${index === 0 ? 'bg-gradient-to-r from-yellow-600/20 to-amber-600/20 border-yellow-500/30' : index === 1 ? 'bg-gradient-to-r from-slate-600/20 to-slate-700/20 border-slate-400/30' : index === 2 ? 'bg-gradient-to-r from-orange-600/20 to-red-600/20 border-orange-500/30' : isCurrentUser ? 'bg-gradient-to-r from-yellow-600/20 to-orange-600/20 border-yellow-500/30' : 'bg-slate-700/20 border-slate-600/20'}`}
                                 >
                                     <div className="flex items-center space-x-4">
                                         <div
@@ -490,7 +490,7 @@ export default function FlagGame() {
                                         </div>
                                         <div>
                                             <div
-                                                className={`font-bold text-lg ${isCurrentUser ? 'text-blue-300' : 'text-white'}`}>
+                                                className={`font-bold text-lg ${isCurrentUser ? 'text-yellow-300' : 'text-white'}`}>
                                                 {entry.username} {isCurrentUser && '(Ty)'}
                                             </div>
                                             <div className="text-slate-400 text-sm">
