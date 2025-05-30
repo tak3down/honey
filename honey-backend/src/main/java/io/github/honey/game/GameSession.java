@@ -1,7 +1,5 @@
 package io.github.honey.game;
 
-import java.time.long;
-
 public final class GameSession {
   private String sessionId;
   private String username;
