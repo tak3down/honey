@@ -11,8 +11,8 @@ public class HoneyWebConfig implements WebMvcConfigurer {
   public void addCorsMappings(final CorsRegistry registry) {
     registry
         .addMapping("/api/**")
+        .allowedOrigins("http://localhost:3000")
         .allowedMethods("GET", "POST", "PUT", "DELETE", "OPTIONS")
-        .allowedOrigins("*")
         .allowedHeaders("*")
         .allowCredentials(true);
   }
