@@ -5,7 +5,7 @@ public final class GameStartRequest {
 
   public GameStartRequest() {}
 
-  public GameStartRequest(final String username) {
+  public GameStartRequest(String username) {
     this.username = username;
   }
 
@@ -13,7 +13,7 @@ public final class GameStartRequest {
     return username;
   }
 
-  public void setUsername(final String username) {
+  public void setUsername(String username) {
     this.username = username;
   }
 }

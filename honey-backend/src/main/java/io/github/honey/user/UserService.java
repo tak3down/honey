@@ -9,29 +9,27 @@ public final class UserService {
 
   private final Map<String, User> users = new ConcurrentHashMap<>();
 
-  public User authenticate(final String username, final String password) {
-    final User user = users.get(username);
-    if (user != null && user.getPassword().equals(password)) {
+  public User authenticate(String username, String password) {
+    User user = users.get(username);
+    if (user != null && user.getPassword().equals(password))
       return user;
-    }
     return null;
   }
 
-  public User registerUser(final String username, final String password) {
-    if (users.containsKey(username)) {
+  public User registerUser(String username, String password) {
+    if (users.containsKey(username))
       return null;
-    }
 
-    final User user = new User(username, password);
+    User user = new User(username, password);
     users.put(username, user);
     return user;
   }
 
-  public User getUserByUsername(final String username) {
+  public User getUserByUsername(String username) {
     return users.get(username);
   }
 
-  public boolean userExists(final String username) {
+  public boolean userExists(String username) {
     return users.containsKey(username);
   }
 }

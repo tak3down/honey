@@ -11,10 +11,10 @@ public class GameQuestion {
   public GameQuestion() {}
 
   public GameQuestion(
-      final String flagUrl,
-      final String correctCountry,
-      final List<String> options,
-      final int questionNumber) {
+      String flagUrl,
+      String correctCountry,
+      List<String> options,
+      int questionNumber) {
     this.flagUrl = flagUrl;
     this.correctCountry = correctCountry;
     this.options = options;
@@ -25,7 +25,7 @@ public class GameQuestion {
     return flagUrl;
   }
 
-  public void setFlagUrl(final String flagUrl) {
+  public void setFlagUrl(String flagUrl) {
     this.flagUrl = flagUrl;
   }
 
@@ -33,7 +33,7 @@ public class GameQuestion {
     return correctCountry;
   }
 
-  public void setCorrectCountry(final String correctCountry) {
+  public void setCorrectCountry(String correctCountry) {
     this.correctCountry = correctCountry;
   }
 
@@ -41,7 +41,7 @@ public class GameQuestion {
     return options;
   }
 
-  public void setOptions(final List<String> options) {
+  public void setOptions(List<String> options) {
     this.options = options;
   }
 
@@ -49,7 +49,7 @@ public class GameQuestion {
     return questionNumber;
   }
 
-  public void setQuestionNumber(final int questionNumber) {
+  public void setQuestionNumber(int questionNumber) {
     this.questionNumber = questionNumber;
   }
 }

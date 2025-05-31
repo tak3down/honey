@@ -7,7 +7,7 @@ public final class User {
 
   public User() {}
 
-  public User(final String username, final String password) {
+  public User(String username, String password) {
     this.username = username;
     this.password = password;
   }
@@ -16,7 +16,7 @@ public final class User {
     return username;
   }
 
-  public void setUsername(final String username) {
+  public void setUsername(String username) {
     this.username = username;
   }
 
@@ -24,7 +24,7 @@ public final class User {
     return password;
   }
 
-  public void setPassword(final String password) {
+  public void setPassword(String password) {
     this.password = password;
   }
 
@@ -32,7 +32,7 @@ public final class User {
     return currentSessionId;
   }
 
-  public void setCurrentSessionId(final String currentSessionId) {
+  public void setCurrentSessionId(String currentSessionId) {
     this.currentSessionId = currentSessionId;
   }
 }

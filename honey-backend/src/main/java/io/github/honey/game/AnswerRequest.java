@@ -7,7 +7,7 @@ public class AnswerRequest {
 
   public AnswerRequest() {}
 
-  public AnswerRequest(final String sessionId, final String answer) {
+  public AnswerRequest(String sessionId, String answer) {
     this.sessionId = sessionId;
     this.answer = answer;
   }
@@ -16,7 +16,7 @@ public class AnswerRequest {
     return sessionId;
   }
 
-  public void setSessionId(final String sessionId) {
+  public void setSessionId(String sessionId) {
     this.sessionId = sessionId;
   }
 
@@ -24,7 +24,7 @@ public class AnswerRequest {
     return answer;
   }
 
-  public void setAnswer(final String answer) {
+  public void setAnswer(String answer) {
     this.answer = answer;
   }
 }

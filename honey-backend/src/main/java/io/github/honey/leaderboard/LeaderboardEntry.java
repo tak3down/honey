@@ -11,10 +11,10 @@ public final class LeaderboardEntry {
   public LeaderboardEntry() {}
 
   public LeaderboardEntry(
-      final String username,
-      final int score,
-      final long timeElapsed,
-      final LocalDateTime completedAt) {
+      String username,
+      int score,
+      long timeElapsed,
+      LocalDateTime completedAt) {
     this.username = username;
     this.score = score;
     this.timeElapsed = timeElapsed;
@@ -25,7 +25,7 @@ public final class LeaderboardEntry {
     return username;
   }
 
-  public void setUsername(final String username) {
+  public void setUsername(String username) {
     this.username = username;
   }
 
@@ -33,7 +33,7 @@ public final class LeaderboardEntry {
     return score;
   }
 
-  public void setScore(final int score) {
+  public void setScore(int score) {
     this.score = score;
   }
 
@@ -41,7 +41,7 @@ public final class LeaderboardEntry {
     return timeElapsed;
   }
 
-  public void setTimeElapsed(final long timeElapsed) {
+  public void setTimeElapsed(long timeElapsed) {
     this.timeElapsed = timeElapsed;
   }
 
@@ -49,7 +49,7 @@ public final class LeaderboardEntry {
     return completedAt;
   }
 
-  public void setCompletedAt(final LocalDateTime completedAt) {
+  public void setCompletedAt(LocalDateTime completedAt) {
     this.completedAt = completedAt;
   }
 }

@@ -13,7 +13,7 @@ public final class GameSession {
 
   public GameSession() {}
 
-  public GameSession(final String sessionId, final String username) {
+  public GameSession(String sessionId, String username) {
     this.sessionId = sessionId;
     this.username = username;
     this.score = 0;
@@ -27,7 +27,7 @@ public final class GameSession {
     return sessionId;
   }
 
-  public void setSessionId(final String sessionId) {
+  public void setSessionId(String sessionId) {
     this.sessionId = sessionId;
   }
 
@@ -35,7 +35,7 @@ public final class GameSession {
     return username;
   }
 
-  public void setUsername(final String username) {
+  public void setUsername(String username) {
     this.username = username;
   }
 
@@ -43,7 +43,7 @@ public final class GameSession {
     return score;
   }
 
-  public void setScore(final int score) {
+  public void setScore(int score) {
     this.score = score;
   }
 
@@ -51,7 +51,7 @@ public final class GameSession {
     return totalQuestions;
   }
 
-  public void setTotalQuestions(final int totalQuestions) {
+  public void setTotalQuestions(int totalQuestions) {
     this.totalQuestions = totalQuestions;
   }
 
@@ -59,7 +59,7 @@ public final class GameSession {
     return startTime;
   }
 
-  public void setStartTime(final long startTime) {
+  public void setStartTime(long startTime) {
     this.startTime = startTime;
   }
 
@@ -67,7 +67,7 @@ public final class GameSession {
     return endTime;
   }
 
-  public void setEndTime(final long endTime) {
+  public void setEndTime(long endTime) {
     this.endTime = endTime;
   }
 
@@ -75,7 +75,7 @@ public final class GameSession {
     return isFinished;
   }
 
-  public void setFinished(final boolean finished) {
+  public void setFinished(boolean finished) {
     isFinished = finished;
   }
 
@@ -83,7 +83,7 @@ public final class GameSession {
     return currentQuestion;
   }
 
-  public void setCurrentQuestion(final GameQuestion currentQuestion) {
+  public void setCurrentQuestion(GameQuestion currentQuestion) {
     this.currentQuestion = currentQuestion;
   }
 
@@ -91,7 +91,7 @@ public final class GameSession {
     return questionNumber;
   }
 
-  public void setQuestionNumber(final int questionNumber) {
+  public void setQuestionNumber(int questionNumber) {
     this.questionNumber = questionNumber;
   }
 }

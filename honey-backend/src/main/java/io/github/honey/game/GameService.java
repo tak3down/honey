@@ -62,33 +62,32 @@ public final class GameService {
     countries.addAll(countryFlags.keySet());
   }
 
-  public GameSession startNewGame(final String username) {
-    final String sessionId = UUID.randomUUID().toString();
-    final GameSession session = new GameSession(sessionId, username);
+  public GameSession startNewGame(String username) {
+    String sessionId = UUID.randomUUID().toString();
+    GameSession session = new GameSession(sessionId, username);
 
-    final GameQuestion firstQuestion = generateQuestion(1);
+    GameQuestion firstQuestion = generateQuestion(1);
     session.setCurrentQuestion(firstQuestion);
 
     activeSessions.put(sessionId, session);
     return session;
   }
 
-  public GameSession submitAnswer(final String sessionId, final String answer) {
-    final GameSession session = activeSessions.get(sessionId);
-    if (session == null) { // || session.isFinished()
+  public GameSession submitAnswer(String sessionId, String answer) {
+    GameSession session = activeSessions.get(sessionId);
+    // || session.isFinished()
+    if (session == null)
       return null;
-    }
 
-    final boolean isCorrect = session.getCurrentQuestion().getCorrectCountry().equals(answer);
-    if (isCorrect) {
+    boolean isCorrect = session.getCurrentQuestion().getCorrectCountry().equals(answer);
+    if (isCorrect)
       session.setScore(session.getScore() + 1);
-    }
 
-    if (session.getQuestionNumber() >= 10) {
+    if (session.getQuestionNumber() >= 10)
       finishGame(session);
-    } else {
-      final int nextQuestionNumber = session.getQuestionNumber() + 1;
-      final GameQuestion nextQuestion = generateQuestion(nextQuestionNumber);
+    else {
+      int nextQuestionNumber = session.getQuestionNumber() + 1;
+      GameQuestion nextQuestion = generateQuestion(nextQuestionNumber);
       session.setCurrentQuestion(nextQuestion);
       session.setQuestionNumber(nextQuestionNumber);
     }
@@ -96,41 +95,40 @@ public final class GameService {
     return session;
   }
 
-  private void finishGame(final GameSession session) {
+  private void finishGame(GameSession session) {
     session.setFinished(true);
     session.setEndTime(System.currentTimeMillis());
 
-    final long timeElapsed = session.getEndTime() - session.getStartTime();
-    final LeaderboardEntry entry =
+    long timeElapsed = session.getEndTime() - session.getStartTime();
+    LeaderboardEntry entry =
         new LeaderboardEntry(
             session.getUsername(), session.getScore(), timeElapsed, LocalDateTime.now());
     leaderboard.add(entry);
 
     leaderboard.sort(
         (a, b) -> {
-          final int scoreCompare = Integer.compare(b.getScore(), a.getScore());
-          if (scoreCompare == 0) {
+          int scoreCompare = Integer.compare(b.getScore(), a.getScore());
+          if (scoreCompare == 0)
             return Long.compare(a.getTimeElapsed(), b.getTimeElapsed());
-          }
           return scoreCompare;
         });
 
     activeSessions.remove(session.getSessionId());
   }
 
-  private GameQuestion generateQuestion(final int questionNumber) {
-    final String correctCountry =
+  private GameQuestion generateQuestion(int questionNumber) {
+    String correctCountry =
         countries.get(ThreadLocalRandom.current().nextInt(countries.size()));
-    final String flagUrl = countryFlags.get(correctCountry);
+    String flagUrl = countryFlags.get(correctCountry);
 
-    final List<String> options = new ArrayList<>();
+    List<String> options = new ArrayList<>();
     options.add(correctCountry);
 
-    final List<String> availableCountries = new ArrayList<>(countries);
+    List<String> availableCountries = new ArrayList<>(countries);
     availableCountries.remove(correctCountry);
 
     for (int i = 0; i < 3; i++) {
-      final String wrongCountry =
+      String wrongCountry =
           availableCountries.get(ThreadLocalRandom.current().nextInt(availableCountries.size()));
       options.add(wrongCountry);
       availableCountries.remove(wrongCountry);
@@ -145,17 +143,16 @@ public final class GameService {
     return leaderboard.stream()
         .sorted(
             (a, b) -> {
-              final int scoreCompare = Integer.compare(b.getScore(), a.getScore());
-              if (scoreCompare == 0) {
+              int scoreCompare = Integer.compare(b.getScore(), a.getScore());
+              if (scoreCompare == 0)
                 return Long.compare(a.getTimeElapsed(), b.getTimeElapsed());
-              }
               return scoreCompare;
             })
         .limit(50)
         .collect(toList());
   }
 
-  public GameSession getSession(final String sessionId) {
+  public GameSession getSession(String sessionId) {
     return activeSessions.get(sessionId);
   }
 }
