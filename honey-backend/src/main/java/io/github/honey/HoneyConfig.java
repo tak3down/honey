@@ -28,22 +28,25 @@ public final class HoneyConfig {
 
   @PostConstruct
   public void load() {
-    Path dataPath = Paths.get("");
-    File configFile = dataPath.resolve("config.json").toFile();
-    if (!configFile.exists())
+    final Path dataPath = Paths.get("");
+    final File configFile = dataPath.resolve("config.json").toFile();
+    if (!configFile.exists()) {
       try {
-        if (!configFile.createNewFile()) throw new IOException("Failed to create config file");
+        if (!configFile.createNewFile()) {
+          throw new IOException("Failed to create config file");
+        }
 
         jsonMapper.writeValue(configFile, this);
         return;
 
-      } catch (Exception exception) {
+      } catch (final Exception exception) {
         throw new HoneyConfigException("Failed to create config file", exception);
       }
+    }
 
     try {
       jsonMapper.readerForUpdating(this).readValue(configFile);
-    } catch (IOException exception) {
+    } catch (final IOException exception) {
       throw new HoneyConfigException(
           "Failed to load config, because of unexpected exception", exception);
     }

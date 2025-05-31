@@ -26,34 +26,39 @@ public final class GameService {
   private final List<String> countries = new ArrayList<>();
   private final Map<String, String> countryFlags = new HashMap<>();
 
-  public GameService(HoneyConfig honeyConfig) {
+  public GameService(final HoneyConfig honeyConfig) {
     countryFlags.putAll(honeyConfig.countryFlags);
     countries.addAll(honeyConfig.countryFlags.keySet());
   }
 
-  public GameSession startNewGame(String username) {
-    String sessionId = UUID.randomUUID().toString();
-    GameSession session = new GameSession(sessionId, username);
+  public GameSession startNewGame(final String username) {
+    final String sessionId = UUID.randomUUID().toString();
+    final GameSession session = new GameSession(sessionId, username);
 
-    GameQuestion firstQuestion = generateQuestion(1);
+    final GameQuestion firstQuestion = generateQuestion(1);
     session.setCurrentQuestion(firstQuestion);
 
     activeSessions.put(sessionId, session);
     return session;
   }
 
-  public GameSession submitAnswer(String sessionId, String answer) {
-    GameSession session = activeSessions.get(sessionId);
+  public GameSession submitAnswer(final String sessionId, final String answer) {
+    final GameSession session = activeSessions.get(sessionId);
     // || session.isFinished()
-    if (session == null) return null;
+    if (session == null) {
+      return null;
+    }
 
-    boolean isCorrect = session.getCurrentQuestion().getCorrectCountry().equals(answer);
-    if (isCorrect) session.setScore(session.getScore() + 1);
+    final boolean isCorrect = session.getCurrentQuestion().getCorrectCountry().equals(answer);
+    if (isCorrect) {
+      session.setScore(session.getScore() + 1);
+    }
 
-    if (session.getQuestionNumber() >= 10) finishGame(session);
-    else {
-      int nextQuestionNumber = session.getQuestionNumber() + 1;
-      GameQuestion nextQuestion = generateQuestion(nextQuestionNumber);
+    if (session.getQuestionNumber() >= 10) {
+      finishGame(session);
+    } else {
+      final int nextQuestionNumber = session.getQuestionNumber() + 1;
+      final GameQuestion nextQuestion = generateQuestion(nextQuestionNumber);
       session.setCurrentQuestion(nextQuestion);
       session.setQuestionNumber(nextQuestionNumber);
     }
@@ -61,20 +66,20 @@ public final class GameService {
     return session;
   }
 
-  private void finishGame(GameSession session) {
+  private void finishGame(final GameSession session) {
     session.setFinished(true);
     session.setEndTime(System.currentTimeMillis());
 
-    long timeElapsed = session.getEndTime() - session.getStartTime();
+    final long timeElapsed = session.getEndTime() - session.getStartTime();
 
-    LeaderboardEntry entry =
+    final LeaderboardEntry entry =
         new LeaderboardEntry(
             session.getUsername(), session.getScore(), timeElapsed, LocalDateTime.now());
 
     boolean shouldSort = true;
     boolean isNewEntry = true;
 
-    for (LeaderboardEntry leaderboardEntry : leaderboard)
+    for (final LeaderboardEntry leaderboardEntry : leaderboard) {
       if (leaderboardEntry.getUsername().equals(session.getUsername())) {
         isNewEntry = false;
 
@@ -89,32 +94,39 @@ public final class GameService {
 
         break;
       }
+    }
 
-    if (isNewEntry) leaderboard.add(entry);
+    if (isNewEntry) {
+      leaderboard.add(entry);
+    }
 
-    if (shouldSort)
+    if (shouldSort) {
       leaderboard.sort(
           (a, b) -> {
-            int scoreCompare = Integer.compare(b.getScore(), a.getScore());
-            if (scoreCompare == 0) return Long.compare(a.getTimeElapsed(), b.getTimeElapsed());
+            final int scoreCompare = Integer.compare(b.getScore(), a.getScore());
+            if (scoreCompare == 0) {
+              return Long.compare(a.getTimeElapsed(), b.getTimeElapsed());
+            }
             return scoreCompare;
           });
+    }
 
     activeSessions.remove(session.getSessionId());
   }
 
-  private GameQuestion generateQuestion(int questionNumber) {
-    String correctCountry = countries.get(ThreadLocalRandom.current().nextInt(countries.size()));
-    String flagUrl = countryFlags.get(correctCountry);
+  private GameQuestion generateQuestion(final int questionNumber) {
+    final String correctCountry =
+        countries.get(ThreadLocalRandom.current().nextInt(countries.size()));
+    final String flagUrl = countryFlags.get(correctCountry);
 
-    List<String> options = new ArrayList<>();
+    final List<String> options = new ArrayList<>();
     options.add(correctCountry);
 
-    List<String> availableCountries = new ArrayList<>(countries);
+    final List<String> availableCountries = new ArrayList<>(countries);
     availableCountries.remove(correctCountry);
 
     for (int i = 0; i < 3; i++) {
-      String wrongCountry =
+      final String wrongCountry =
           availableCountries.get(ThreadLocalRandom.current().nextInt(availableCountries.size()));
       options.add(wrongCountry);
       availableCountries.remove(wrongCountry);
@@ -129,15 +141,17 @@ public final class GameService {
     return leaderboard.stream()
         .sorted(
             (a, b) -> {
-              int scoreCompare = Integer.compare(b.getScore(), a.getScore());
-              if (scoreCompare == 0) return Long.compare(a.getTimeElapsed(), b.getTimeElapsed());
+              final int scoreCompare = Integer.compare(b.getScore(), a.getScore());
+              if (scoreCompare == 0) {
+                return Long.compare(a.getTimeElapsed(), b.getTimeElapsed());
+              }
               return scoreCompare;
             })
         .limit(MAX_LEADERBOARD_SIZE)
         .collect(toList());
   }
 
-  public GameSession getSession(String sessionId) {
+  public GameSession getSession(final String sessionId) {
     return activeSessions.get(sessionId);
   }
 }

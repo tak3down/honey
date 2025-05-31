@@ -16,23 +16,25 @@ public class AuthController {
 
   private final UserService userService;
 
-  public AuthController(UserService userService) {
+  public AuthController(final UserService userService) {
     this.userService = userService;
   }
 
   @PostMapping("/login")
-  public ResponseEntity<?> login(@RequestBody AuthRequest request) {
-    User user = userService.authenticate(request.getUsername(), request.getPassword());
-    if (user != null)
+  public ResponseEntity<?> login(@RequestBody final AuthRequest request) {
+    final User user = userService.authenticate(request.getUsername(), request.getPassword());
+    if (user != null) {
       return ResponseEntity.ok(user);
+    }
     return ResponseEntity.badRequest().body("Invalid credentials");
   }
 
   @PostMapping("/register")
-  public ResponseEntity<?> register(@RequestBody AuthRequest request) {
-    User user = userService.registerUser(request.getUsername(), request.getPassword());
-    if (user != null)
+  public ResponseEntity<?> register(@RequestBody final AuthRequest request) {
+    final User user = userService.registerUser(request.getUsername(), request.getPassword());
+    if (user != null) {
       return ResponseEntity.ok(user);
+    }
     return ResponseEntity.badRequest().body("Username already exists");
   }
 }

@@ -8,7 +8,7 @@ public class Honey {
 
   private Honey() {}
 
-  public static void main(String[] args) {
+  public static void main(final String[] args) {
     SpringApplication.run(Honey.class, args);
   }
 }

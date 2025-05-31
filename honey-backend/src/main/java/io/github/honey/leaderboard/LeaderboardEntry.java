@@ -11,7 +11,11 @@ public final class LeaderboardEntry implements Comparable<LeaderboardEntry> {
 
   public LeaderboardEntry() {}
 
-  public LeaderboardEntry(String username, int score, long timeElapsed, LocalDateTime completedAt) {
+  public LeaderboardEntry(
+      final String username,
+      final int score,
+      final long timeElapsed,
+      final LocalDateTime completedAt) {
     this.username = username;
     this.score = score;
     this.timeElapsed = timeElapsed;
@@ -22,7 +26,7 @@ public final class LeaderboardEntry implements Comparable<LeaderboardEntry> {
     return username;
   }
 
-  public void setUsername(String username) {
+  public void setUsername(final String username) {
     this.username = username;
   }
 
@@ -30,7 +34,7 @@ public final class LeaderboardEntry implements Comparable<LeaderboardEntry> {
     return score;
   }
 
-  public void setScore(int score) {
+  public void setScore(final int score) {
     this.score = score;
   }
 
@@ -38,7 +42,7 @@ public final class LeaderboardEntry implements Comparable<LeaderboardEntry> {
     return timeElapsed;
   }
 
-  public void setTimeElapsed(long timeElapsed) {
+  public void setTimeElapsed(final long timeElapsed) {
     this.timeElapsed = timeElapsed;
   }
 
@@ -46,22 +50,28 @@ public final class LeaderboardEntry implements Comparable<LeaderboardEntry> {
     return completedAt;
   }
 
-  public void setCompletedAt(LocalDateTime completedAt) {
+  public void setCompletedAt(final LocalDateTime completedAt) {
     this.completedAt = completedAt;
   }
 
   @Override
-  public int compareTo(LeaderboardEntry obj) {
-    if (obj == null) return 1;
-    if (score == obj.score) return completedAt.compareTo(obj.completedAt);
+  public int compareTo(final LeaderboardEntry obj) {
+    if (obj == null) {
+      return 1;
+    }
+    if (score == obj.score) {
+      return completedAt.compareTo(obj.completedAt);
+    }
 
     return score - obj.score;
   }
 
   @Override
-  public boolean equals(Object obj) {
-    if (obj == null || getClass() != obj.getClass()) return false;
-    LeaderboardEntry that = (LeaderboardEntry) obj;
+  public boolean equals(final Object obj) {
+    if (obj == null || getClass() != obj.getClass()) {
+      return false;
+    }
+    final LeaderboardEntry that = (LeaderboardEntry) obj;
     return Objects.equals(username, that.username);
   }
 
