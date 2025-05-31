@@ -3,6 +3,7 @@ package io.github.honey.game;
 import static java.util.Collections.shuffle;
 import static java.util.stream.Collectors.toList;
 
+import io.github.honey.HoneyConfig;
 import io.github.honey.leaderboard.LeaderboardEntry;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -17,49 +18,17 @@ import org.springframework.stereotype.Service;
 @Service
 public final class GameService {
 
+  private static final int MAX_LEADERBOARD_SIZE = 50;
+
   private final Map<String, GameSession> activeSessions = new ConcurrentHashMap<>();
   private final List<LeaderboardEntry> leaderboard = new ArrayList<>();
 
-  private final Map<String, String> countryFlags = new HashMap<>();
   private final List<String> countries = new ArrayList<>();
+  private final Map<String, String> countryFlags = new HashMap<>();
 
-  public GameService() {
-    initializeCountryData();
-  }
-
-  private void initializeCountryData() {
-    countryFlags.put("Stany Zjednoczone", "https://flagcdn.com/w320/us.png");
-    countryFlags.put("Wielka Brytania", "https://flagcdn.com/w320/gb.png");
-    countryFlags.put("Niemcy", "https://flagcdn.com/w320/de.png");
-    countryFlags.put("Francja", "https://flagcdn.com/w320/fr.png");
-    countryFlags.put("Włochy", "https://flagcdn.com/w320/it.png");
-    countryFlags.put("Hiszpania", "https://flagcdn.com/w320/es.png");
-    countryFlags.put("Kanada", "https://flagcdn.com/w320/ca.png");
-    countryFlags.put("Australia", "https://flagcdn.com/w320/au.png");
-    countryFlags.put("Japonia", "https://flagcdn.com/w320/jp.png");
-    countryFlags.put("Chiny", "https://flagcdn.com/w320/cn.png");
-    countryFlags.put("Brazylia", "https://flagcdn.com/w320/br.png");
-    countryFlags.put("Indie", "https://flagcdn.com/w320/in.png");
-    countryFlags.put("Rosja", "https://flagcdn.com/w320/ru.png");
-    countryFlags.put("Meksyk", "https://flagcdn.com/w320/mx.png");
-    countryFlags.put("Polska", "https://flagcdn.com/w320/pl.png");
-    countryFlags.put("Szwecja", "https://flagcdn.com/w320/se.png");
-    countryFlags.put("Norwegia", "https://flagcdn.com/w320/no.png");
-    countryFlags.put("Holandia", "https://flagcdn.com/w320/nl.png");
-    countryFlags.put("Belgia", "https://flagcdn.com/w320/be.png");
-    countryFlags.put("Szwajcaria", "https://flagcdn.com/w320/ch.png");
-    countryFlags.put("Austria", "https://flagcdn.com/w320/at.png");
-    countryFlags.put("Portugalia", "https://flagcdn.com/w320/pt.png");
-    countryFlags.put("Grecja", "https://flagcdn.com/w320/gr.png");
-    countryFlags.put("Turcja", "https://flagcdn.com/w320/tr.png");
-    countryFlags.put("Egipt", "https://flagcdn.com/w320/eg.png");
-    countryFlags.put("RPA", "https://flagcdn.com/w320/za.png");
-    countryFlags.put("Argentyna", "https://flagcdn.com/w320/ar.png");
-    countryFlags.put("Chile", "https://flagcdn.com/w320/cl.png");
-    countryFlags.put("Kolumbia", "https://flagcdn.com/w320/co.png");
-    countryFlags.put("Korea Południowa", "https://flagcdn.com/w320/kr.png");
-
-    countries.addAll(countryFlags.keySet());
+  public GameService(HoneyConfig honeyConfig) {
+    countryFlags.putAll(honeyConfig.countryFlags);
+    countries.addAll(honeyConfig.countryFlags.keySet());
   }
 
   public GameSession startNewGame(String username) {
@@ -76,15 +45,12 @@ public final class GameService {
   public GameSession submitAnswer(String sessionId, String answer) {
     GameSession session = activeSessions.get(sessionId);
     // || session.isFinished()
-    if (session == null)
-      return null;
+    if (session == null) return null;
 
     boolean isCorrect = session.getCurrentQuestion().getCorrectCountry().equals(answer);
-    if (isCorrect)
-      session.setScore(session.getScore() + 1);
+    if (isCorrect) session.setScore(session.getScore() + 1);
 
-    if (session.getQuestionNumber() >= 10)
-      finishGame(session);
+    if (session.getQuestionNumber() >= 10) finishGame(session);
     else {
       int nextQuestionNumber = session.getQuestionNumber() + 1;
       GameQuestion nextQuestion = generateQuestion(nextQuestionNumber);
@@ -100,25 +66,45 @@ public final class GameService {
     session.setEndTime(System.currentTimeMillis());
 
     long timeElapsed = session.getEndTime() - session.getStartTime();
+
     LeaderboardEntry entry =
         new LeaderboardEntry(
             session.getUsername(), session.getScore(), timeElapsed, LocalDateTime.now());
-    leaderboard.add(entry);
 
-    leaderboard.sort(
-        (a, b) -> {
-          int scoreCompare = Integer.compare(b.getScore(), a.getScore());
-          if (scoreCompare == 0)
-            return Long.compare(a.getTimeElapsed(), b.getTimeElapsed());
-          return scoreCompare;
-        });
+    boolean shouldSort = true;
+    boolean isNewEntry = true;
+
+    for (LeaderboardEntry leaderboardEntry : leaderboard)
+      if (leaderboardEntry.getUsername().equals(session.getUsername())) {
+        isNewEntry = false;
+
+        if (leaderboardEntry.compareTo(entry) <= 0) { // is less than or equal to
+          shouldSort = false;
+          continue;
+        }
+
+        leaderboardEntry.setScore(entry.getScore());
+        leaderboardEntry.setTimeElapsed(entry.getTimeElapsed());
+        leaderboardEntry.setCompletedAt(entry.getCompletedAt());
+
+        break;
+      }
+
+    if (isNewEntry) leaderboard.add(entry);
+
+    if (shouldSort)
+      leaderboard.sort(
+          (a, b) -> {
+            int scoreCompare = Integer.compare(b.getScore(), a.getScore());
+            if (scoreCompare == 0) return Long.compare(a.getTimeElapsed(), b.getTimeElapsed());
+            return scoreCompare;
+          });
 
     activeSessions.remove(session.getSessionId());
   }
 
   private GameQuestion generateQuestion(int questionNumber) {
-    String correctCountry =
-        countries.get(ThreadLocalRandom.current().nextInt(countries.size()));
+    String correctCountry = countries.get(ThreadLocalRandom.current().nextInt(countries.size()));
     String flagUrl = countryFlags.get(correctCountry);
 
     List<String> options = new ArrayList<>();
@@ -144,11 +130,10 @@ public final class GameService {
         .sorted(
             (a, b) -> {
               int scoreCompare = Integer.compare(b.getScore(), a.getScore());
-              if (scoreCompare == 0)
-                return Long.compare(a.getTimeElapsed(), b.getTimeElapsed());
+              if (scoreCompare == 0) return Long.compare(a.getTimeElapsed(), b.getTimeElapsed());
               return scoreCompare;
             })
-        .limit(50)
+        .limit(MAX_LEADERBOARD_SIZE)
         .collect(toList());
   }
 
