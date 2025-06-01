@@ -17,7 +17,7 @@ final class ResourceResolver {
     try {
       final InputStream originalStream = source.get();
       if (originalStream == null) {
-        return null; // Javalin will treat this as “not found”
+        return null;
       }
 
       if (uri.endsWith(".html") || uri.endsWith(".js")) {
@@ -35,7 +35,6 @@ final class ResourceResolver {
         return () -> Either.right(new ByteArrayInputStream(replacedBytes));
       }
 
-      // 3) Otherwise (binary/CSS/images/etc), just hand back the raw stream
       return () -> Either.right(originalStream);
 
     } catch (final Exception ex) {
@@ -45,7 +44,6 @@ final class ResourceResolver {
     }
   }
 
-  /** Utility to read an InputStream completely into a byte[]. */
   private byte[] toByteArray(InputStream in) throws IOException {
     ByteArrayOutputStream buffer = new ByteArrayOutputStream();
     byte[] tmp = new byte[4 * 1024];
