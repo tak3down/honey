@@ -57,11 +57,16 @@ public final class LeaderboardEntry implements Comparable<LeaderboardEntry> {
 
   @Override
   public int compareTo(@NotNull final LeaderboardEntry obj) {
-    if (score == obj.score) {
-      return completedAt.compareTo(obj.completedAt);
+    if (obj.getScore() == this.getScore()) {
+
+      if (obj.getTimeElapsed() == this.getTimeElapsed()) {
+        return this.getCompletedAt().compareTo(obj.getCompletedAt());
+      }
+
+      return obj.getTimeElapsed() > this.getTimeElapsed() ? -1 : 1;
     }
 
-    return score - obj.score > 0 ? 1 : -1;
+    return Integer.compare(obj.getScore(), this.getScore());
   }
 
   @Override
