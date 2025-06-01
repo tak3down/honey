@@ -4,19 +4,25 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
 import com.fasterxml.jackson.databind.json.JsonMapper;
-import jakarta.annotation.PostConstruct;
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.HashMap;
 import java.util.Map;
-import org.springframework.stereotype.Component;
 
-@Component
 public final class HoneyConfig {
 
   @JsonIgnore private final ObjectMapper jsonMapper;
+
+  public String host;
+  public int port;
+
+  public boolean useSsl;
+  public boolean enforceSsl;
+  public int sslPort;
+
+  public String forwardedIp;
 
   public Map<String, String> countryFlags = new HashMap<>();
 
@@ -26,7 +32,6 @@ public final class HoneyConfig {
     defaultValues();
   }
 
-  @PostConstruct
   public void load() {
     final Path dataPath = Paths.get("");
     final File configFile = dataPath.resolve("config.json").toFile();
@@ -53,6 +58,16 @@ public final class HoneyConfig {
   }
 
   private void defaultValues() {
+    host = "0.0.0.0";
+    port = 80;
+
+    useSsl = false;
+    enforceSsl = false;
+    sslPort = 443;
+
+    // CF-Connecting-IP OR X-Real-IP
+    forwardedIp = "X-Real-IP";
+
     countryFlags.put("Stany Zjednoczone", "https://flagcdn.com/w320/us.png");
     countryFlags.put("Wielka Brytania", "https://flagcdn.com/w320/gb.png");
     countryFlags.put("Niemcy", "https://flagcdn.com/w320/de.png");

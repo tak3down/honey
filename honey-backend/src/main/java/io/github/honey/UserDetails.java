@@ -1,13 +1,13 @@
-package io.github.honey.user;
+package io.github.honey;
 
-public final class User {
+public final class UserDetails {
   private String username;
   private String password;
   private String currentSessionId;
 
-  public User() {}
+  public UserDetails() {}
 
-  public User(final String username, final String password) {
+  public UserDetails(final String username, final String password) {
     this.username = username;
     this.password = password;
   }

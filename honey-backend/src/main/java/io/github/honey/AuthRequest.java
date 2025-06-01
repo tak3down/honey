@@ -1,9 +1,13 @@
-package io.github.honey.auth;
+package io.github.honey;
+
+import com.fasterxml.jackson.annotation.JsonCreator;
 
 public class AuthRequest {
+
   private String username;
   private String password;
 
+  @JsonCreator
   public AuthRequest() {}
 
   public AuthRequest(final String username, final String password) {

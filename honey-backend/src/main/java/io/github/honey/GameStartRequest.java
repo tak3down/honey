@@ -1,8 +1,12 @@
-package io.github.honey.game;
+package io.github.honey;
+
+import com.fasterxml.jackson.annotation.JsonCreator;
 
 public final class GameStartRequest {
+
   private String username;
 
+  @JsonCreator
   public GameStartRequest() {}
 
   public GameStartRequest(final String username) {

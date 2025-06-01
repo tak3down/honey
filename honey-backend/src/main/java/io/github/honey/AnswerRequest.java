@@ -1,10 +1,13 @@
-package io.github.honey.game;
+package io.github.honey;
 
-public class AnswerRequest {
+import com.fasterxml.jackson.annotation.JsonCreator;
+
+public final class AnswerRequest {
 
   private String sessionId;
   private String answer;
 
+  @JsonCreator
   public AnswerRequest() {}
 
   public AnswerRequest(final String sessionId, final String answer) {

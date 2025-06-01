@@ -1,4 +1,4 @@
-package io.github.honey.leaderboard;
+package io.github.honey;
 
 import java.time.LocalDateTime;
 import java.util.Objects;

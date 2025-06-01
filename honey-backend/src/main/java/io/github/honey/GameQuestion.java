@@ -1,4 +1,4 @@
-package io.github.honey.game;
+package io.github.honey;
 
 import java.util.List;
 

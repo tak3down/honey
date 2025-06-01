@@ -1,10 +1,8 @@
-package io.github.honey.game;
+package io.github.honey;
 
 import static java.util.Collections.shuffle;
 import static java.util.stream.Collectors.toList;
 
-import io.github.honey.HoneyConfig;
-import io.github.honey.leaderboard.LeaderboardEntry;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -13,9 +11,7 @@ import java.util.Map;
 import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ThreadLocalRandom;
-import org.springframework.stereotype.Service;
 
-@Service
 public final class GameService {
 
   private static final int MAX_LEADERBOARD_SIZE = 50;
@@ -44,7 +40,6 @@ public final class GameService {
 
   public GameSession submitAnswer(final String sessionId, final String answer) {
     final GameSession session = activeSessions.get(sessionId);
-    // || session.isFinished()
     if (session == null) {
       return null;
     }
@@ -57,8 +52,10 @@ public final class GameService {
     if (session.getQuestionNumber() >= 10) {
       finishGame(session);
     } else {
+
       final int nextQuestionNumber = session.getQuestionNumber() + 1;
       final GameQuestion nextQuestion = generateQuestion(nextQuestionNumber);
+
       session.setCurrentQuestion(nextQuestion);
       session.setQuestionNumber(nextQuestionNumber);
     }
