@@ -17,6 +17,7 @@ public final class HoneyConfig {
 
   public String host;
   public int port;
+  public String apiBase;
 
   public boolean useSsl;
   public boolean enforceSsl;
@@ -59,6 +60,7 @@ public final class HoneyConfig {
 
   private void defaultValues() {
     host = "0.0.0.0";
+    apiBase = "http://localhost:80";
     port = 80;
 
     useSsl = false;

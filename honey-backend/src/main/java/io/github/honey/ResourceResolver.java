@@ -23,15 +23,7 @@ final class ResourceResolver {
       if (uri.endsWith(".html") || uri.endsWith(".js")) {
         byte[] rawBytes = toByteArray(originalStream);
 
-        String textContent = new String(rawBytes, UTF_8);
-
-        textContent = textContent.replace("{{HONEY.PORT}}", String.valueOf(honeyConfig.port));
-        textContent =
-            textContent.replace("{{HONEY.SSL_PORT}}", String.valueOf(honeyConfig.sslPort));
-        textContent = textContent.replace("{{HONEY.FORWARED_IP}}", honeyConfig.forwardedIp);
-
-        byte[] replacedBytes = textContent.getBytes(UTF_8);
-
+        byte[] replacedBytes = getReplacedBytes(rawBytes);
         return () -> Either.right(new ByteArrayInputStream(replacedBytes));
       }
 
@@ -42,6 +34,18 @@ final class ResourceResolver {
           .error("Failed to resolve resource {}", uri, ex);
       return null;
     }
+  }
+
+  private byte[] getReplacedBytes(byte[] rawBytes) {
+    String textContent = new String(rawBytes, UTF_8);
+
+    textContent = textContent.replace("{{HONEY.PORT}}", String.valueOf(honeyConfig.port));
+    textContent = textContent.replace("{{HONEY.HOST}}", String.valueOf(honeyConfig.host));
+    textContent = textContent.replace("{{HONEY.API_BASE}}", String.valueOf(honeyConfig.apiBase));
+    textContent = textContent.replace("{{HONEY.SSL_PORT}}", String.valueOf(honeyConfig.sslPort));
+    textContent = textContent.replace("{{HONEY.FORWARED_IP}}", honeyConfig.forwardedIp);
+
+    return textContent.getBytes(UTF_8);
   }
 
   private byte[] toByteArray(InputStream in) throws IOException {
