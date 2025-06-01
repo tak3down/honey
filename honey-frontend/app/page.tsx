@@ -1,6 +1,6 @@
 'use client';
 
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 
 interface User {
     username: string;
@@ -27,7 +27,7 @@ interface LeaderboardEntry {
     username: string;
     score: number;
     timeElapsed: number;
-    completedAt: string;
+    completedAt: number[];
 }
 
 const API_BASE = '{{HONEY.API_BASE}}/api';
@@ -45,6 +45,19 @@ export default function FlagGame() {
     const [loading, setLoading] = useState(false);
     const [userRank, setUserRank] = useState<number | null>(null);
 
+    useEffect(() => {
+        const storedUser = localStorage.getItem('user');
+        if (storedUser) {
+            try {
+                const parsedUser = JSON.parse(storedUser);
+                setUser(parsedUser);
+            } catch (error) {
+                console.error('Failed to parse user data from localStorage:', error);
+                localStorage.removeItem('user');
+            }
+        }
+    }, []);
+
     const authenticateUser = async () => {
         setLoading(true);
         try {
@@ -57,6 +70,7 @@ export default function FlagGame() {
 
             if (response.ok) {
                 const userData = await response.json();
+                localStorage.setItem('user', JSON.stringify(userData));
                 setUser(userData);
                 setCurrentPage('menu');
             } else {
@@ -117,7 +131,7 @@ export default function FlagGame() {
                     if (updatedSession["finished"]) {
                         console.log('koniec gry ->>>');
 
-                        loadLeaderboard(true); // Load leaderboard to determine user rank
+                        loadLeaderboard(true);
                         setCurrentPage('results');
                     }
                 }, 1500);
@@ -137,7 +151,6 @@ export default function FlagGame() {
                 const data = await response.json();
                 setLeaderboard(data);
 
-                // Find user's rank if they just finished a game
                 if (user && gameSession && silent) {
                     const rank = data.findIndex((entry: LeaderboardEntry) => entry.username === user.username) + 1;
                     setUserRank(rank > 0 ? rank : null);
@@ -163,6 +176,7 @@ export default function FlagGame() {
     };
 
     const logout = () => {
+        localStorage.removeItem('user');
         setUser(null);
         setGameSession(null);
         setCurrentPage('menu');
@@ -170,7 +184,6 @@ export default function FlagGame() {
         setPassword('');
     };
 
-    // Navbar Component
     const Navbar = () => (<nav
         className="bg-gradient-to-r from-slate-900 via-slate-800 to-slate-900 border-b border-slate-700/50 backdrop-blur-sm sticky top-0 z-50 shadow-xl">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -505,7 +518,7 @@ export default function FlagGame() {
                                                 {entry.username} {isCurrentUser && '(Ty)'}
                                             </div>
                                             <div className="text-slate-400 text-sm">
-                                                {new Date(entry.completedAt).toLocaleDateString()}
+                                                {parseLocalDateTime(entry.completedAt).toLocaleDateString()}
                                             </div>
                                         </div>
                                     </div>
@@ -545,5 +558,10 @@ export default function FlagGame() {
             return renderRanking();
         default:
             return renderMenu();
+    }
+
+    function parseLocalDateTime(array: number[]): Date {
+        const [year, month, day, hour, minute, second, nanosecond] = array;
+        return new Date(year, month - 1, day, hour, minute, second, Math.floor(nanosecond / 1_000_000));
     }
 }

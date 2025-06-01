@@ -2,6 +2,7 @@ package io.github.honey;
 
 import java.time.LocalDateTime;
 import java.util.Objects;
+import org.jetbrains.annotations.NotNull;
 
 public final class LeaderboardEntry implements Comparable<LeaderboardEntry> {
   private String username;
@@ -55,15 +56,12 @@ public final class LeaderboardEntry implements Comparable<LeaderboardEntry> {
   }
 
   @Override
-  public int compareTo(final LeaderboardEntry obj) {
-    if (obj == null) {
-      return 1;
-    }
+  public int compareTo(@NotNull final LeaderboardEntry obj) {
     if (score == obj.score) {
       return completedAt.compareTo(obj.completedAt);
     }
 
-    return score - obj.score;
+    return score - obj.score > 0 ? 1 : -1;
   }
 
   @Override
