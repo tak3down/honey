@@ -9,13 +9,12 @@ import io.javalin.community.routing.Route;
 import io.javalin.http.Context;
 import java.util.List;
 
-public final class GameController extends HoneyControllerRegistry {
+final class GameController extends HoneyControllerRegistry {
 
   private final GameService gameService;
   private final UserDetailsService userDetailsService;
 
-  public GameController(
-      final GameService gameService, final UserDetailsService userDetailsService) {
+  GameController(final GameService gameService, final UserDetailsService userDetailsService) {
     this.gameService = gameService;
     this.userDetailsService = userDetailsService;
 

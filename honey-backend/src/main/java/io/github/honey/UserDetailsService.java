@@ -3,11 +3,11 @@ package io.github.honey;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
-public final class UserDetailsService {
+final class UserDetailsService {
 
   private final Map<String, UserDetails> usernameToUserMap = new ConcurrentHashMap<>();
 
-  public UserDetails authenticate(final String username, final String password) {
+  UserDetails authenticate(final String username, final String password) {
     final UserDetails userDetails = usernameToUserMap.get(username);
     if (userDetails != null && userDetails.getPassword().equals(password)) {
       return userDetails;
@@ -15,7 +15,7 @@ public final class UserDetailsService {
     return null;
   }
 
-  public UserDetails registerUser(final String username, final String password) {
+  UserDetails registerUser(final String username, final String password) {
     if (usernameToUserMap.containsKey(username)) {
       return null;
     }
@@ -25,11 +25,11 @@ public final class UserDetailsService {
     return userDetails;
   }
 
-  public UserDetails getUserByUsername(final String username) {
+  UserDetails getUserByUsername(final String username) {
     return usernameToUserMap.get(username);
   }
 
-  public boolean userExists(final String username) {
+  boolean userExists(final String username) {
     return usernameToUserMap.containsKey(username);
   }
 }

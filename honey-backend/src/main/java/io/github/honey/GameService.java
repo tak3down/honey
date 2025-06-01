@@ -12,7 +12,7 @@ import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ThreadLocalRandom;
 
-public final class GameService {
+final class GameService {
 
   private static final int MAX_LEADERBOARD_SIZE = 50;
 
@@ -22,12 +22,12 @@ public final class GameService {
   private final List<String> countries = new ArrayList<>();
   private final Map<String, String> countryFlags = new HashMap<>();
 
-  public GameService(final HoneyConfig honeyConfig) {
+  GameService(final HoneyConfig honeyConfig) {
     countryFlags.putAll(honeyConfig.countryFlags);
     countries.addAll(honeyConfig.countryFlags.keySet());
   }
 
-  public GameSession startNewGame(final String username) {
+  GameSession startNewGame(final String username) {
     final String sessionId = UUID.randomUUID().toString();
     final GameSession session = new GameSession(sessionId, username);
 
@@ -38,7 +38,7 @@ public final class GameService {
     return session;
   }
 
-  public GameSession submitAnswer(final String sessionId, final String answer) {
+  GameSession submitAnswer(final String sessionId, final String answer) {
     final GameSession session = activeSessions.get(sessionId);
     if (session == null) {
       return null;
@@ -134,7 +134,7 @@ public final class GameService {
     return new GameQuestion(flagUrl, correctCountry, options, questionNumber);
   }
 
-  public List<LeaderboardEntry> getLeaderboard() {
+  List<LeaderboardEntry> getLeaderboard() {
     return leaderboard.stream()
         .sorted(
             (a, b) -> {
@@ -148,7 +148,7 @@ public final class GameService {
         .collect(toList());
   }
 
-  public GameSession getSession(final String sessionId) {
+  GameSession getSession(final String sessionId) {
     return activeSessions.get(sessionId);
   }
 }

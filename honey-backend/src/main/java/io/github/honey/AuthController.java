@@ -7,11 +7,11 @@ import static io.github.honey.HoneyController.responseEither;
 import io.javalin.community.routing.Route;
 import io.javalin.http.Context;
 
-public final class AuthController extends HoneyControllerRegistry {
+final class AuthController extends HoneyControllerRegistry {
 
   private final UserDetailsService userDetailsService;
 
-  public AuthController(final UserDetailsService userDetailsService) {
+  AuthController(final UserDetailsService userDetailsService) {
     this.userDetailsService = userDetailsService;
 
     routes(new HoneyController("/api/auth/login", responseEither(this::login), Route.POST));
