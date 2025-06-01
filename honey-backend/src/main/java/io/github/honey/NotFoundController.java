@@ -16,10 +16,8 @@ final class NotFoundController extends HoneyControllerRegistry
   NotFoundController() {
     this.defaultNotFoundHandler =
         context -> {
-          if (context.resultInputStream() == null) {
-            context.html(NotFoundTemplate.createNotFoundPage(context.req().getRequestURI()));
-            context.status(HttpStatus.NOT_FOUND);
-          }
+          context.html(NotFoundTemplate.createNotFoundPage(context.req().getRequestURI()));
+          context.status(HttpStatus.NOT_FOUND);
         };
   }
 
