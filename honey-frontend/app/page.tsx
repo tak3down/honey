@@ -30,7 +30,7 @@ interface LeaderboardEntry {
   completedAt: string;
 }
 
-const API_BASE = 'http://localhost:8080/api';
+const API_BASE = 'http://localhost:80/api';
 
 export default function FlagGame() {
   const [currentPage, setCurrentPage] = useState<'menu' | 'auth' | 'game' | 'results' | 'ranking'>('menu');

@@ -3,8 +3,8 @@ import type {Metadata} from 'next'
 import React from "react";
 
 export const metadata: Metadata = {
-  title: 'Flag Quiz Game',
-  description: 'Test your knowledge of world flags!',
+  title: 'Honey',
+  description: 'Sprawdź swoją wiedzę geograficzną z flagami z całego świata',
 }
 
 export default function RootLayout({
