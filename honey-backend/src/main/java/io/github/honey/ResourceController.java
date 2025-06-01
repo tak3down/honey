@@ -13,6 +13,7 @@ import io.javalin.http.Context;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.*;
+import java.util.function.Supplier;
 import java.util.jar.JarEntry;
 import java.util.jar.JarFile;
 
@@ -117,24 +118,24 @@ final class ResourceController extends HoneyControllerRegistry {
   }
 
   private Either<ApiResponse, InputStream> respondWithResource(
-      final Context context, final String uri, final Source source) {
+      final Context context, final String uri, final Supplier<InputStream> resourceSource) {
 
     ContentType contentType = ContentType.getContentTypeByExtension(getExtension(uri));
     context.contentType(contentType != null ? contentType.getMimeType() : OCTET_STREAM);
 
     if (uri.endsWith(".html") || uri.endsWith(".js")) {
-      return respondWithProcessedResource(context, uri, source);
+      return respondWithProcessedResource(context, uri, resourceSource);
     } else {
-      return respondWithRawResource(source);
+      return respondWithRawResource(resourceSource);
     }
   }
 
   private Either<ApiResponse, InputStream> respondWithProcessedResource(
-      final Context context, final String uri, final Source source) {
+      final Context context, final String uri, final Supplier<InputStream> resourceSource) {
     context.res().setCharacterEncoding("UTF-8");
 
     Either<IOException, InputStream> supplied =
-        ofNullable(resourceResolver.resolve(uri, source))
+        ofNullable(resourceResolver.resolve(uri, resourceSource))
             .map(ResourceSupplier::supply)
             .orElse(null);
 
@@ -149,8 +150,9 @@ final class ResourceController extends HoneyControllerRegistry {
     return right(supplied.right());
   }
 
-  private Either<ApiResponse, InputStream> respondWithRawResource(final Source source) {
-    InputStream in = source.get();
+  private Either<ApiResponse, InputStream> respondWithRawResource(
+      final Supplier<InputStream> resourceSource) {
+    InputStream in = resourceSource.get();
     return (in != null) ? right(in) : notFoundError("Resource not found");
   }
 

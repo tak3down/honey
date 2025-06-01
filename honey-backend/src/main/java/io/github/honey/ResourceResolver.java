@@ -3,6 +3,7 @@ package io.github.honey;
 import static java.nio.charset.StandardCharsets.UTF_8;
 
 import java.io.*;
+import java.util.function.Supplier;
 import org.slf4j.LoggerFactory;
 
 final class ResourceResolver {
@@ -13,9 +14,9 @@ final class ResourceResolver {
     this.honeyConfig = honeyConfig;
   }
 
-  ResourceSupplier resolve(final String uri, final Source source) {
+  ResourceSupplier resolve(final String uri, final Supplier<InputStream> resourceSource) {
     try {
-      final InputStream originalStream = source.get();
+      final InputStream originalStream = resourceSource.get();
       if (originalStream == null) {
         return null;
       }
