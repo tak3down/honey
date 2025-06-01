@@ -1,6 +1,6 @@
 'use client';
 
-import React, {useEffect, useRef, useState} from 'react';
+import React, {useEffect, useState} from 'react';
 
 interface User {
     username: string;
@@ -44,8 +44,6 @@ export default function Honey() {
     const [leaderboard, setLeaderboard] = useState<LeaderboardEntry[]>([]);
     const [loading, setLoading] = useState(false);
     const [userRank, setUserRank] = useState<number | null>(null);
-
-    const button = useRef<HTMLButtonElement>(null);
 
     useEffect(() => {
         const storedUser = localStorage.getItem('user');
@@ -127,10 +125,6 @@ export default function Honey() {
 
                 setTimeout(() => {
 
-                    if (button.current) {
-                        button.current.style.pointerEvents = 'none';
-                    }
-
                     setSelectedAnswer(null);
                     setShowResult(false);
                     setGameSession(updatedSession);
@@ -141,12 +135,6 @@ export default function Honey() {
                         loadLeaderboard(true);
                         setCurrentPage('results');
                     }
-
-                    setTimeout(() => {
-                        if (button.current) {
-                            button.current.style.pointerEvents = '';
-                        }
-                    }, 100);
                 }, 1500);
             } else {
                 alert('Nie udało się przesłać odpowiedzi ' + response);
@@ -407,7 +395,6 @@ export default function Honey() {
 
                                 return (<button
                                     key={index}
-                                    ref={index === 0 ? button : null}
                                     onClick={() => submitAnswer(option)}
                                     disabled={showResult}
                                     className={buttonClass}
