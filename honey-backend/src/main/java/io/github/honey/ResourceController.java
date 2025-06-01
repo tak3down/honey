@@ -2,9 +2,11 @@ package io.github.honey;
 
 import static io.github.honey.ApiResponse.internalServerError;
 import static io.github.honey.ApiResponse.notFoundError;
+import static io.github.honey.Either.*;
 import static io.github.honey.HoneyController.responseEither;
 import static io.javalin.community.routing.Route.GET;
 import static io.javalin.http.ContentType.OCTET_STREAM;
+import static java.util.Optional.ofNullable;
 
 import io.javalin.http.ContentType;
 import io.javalin.http.Context;
@@ -130,19 +132,26 @@ final class ResourceController extends HoneyControllerRegistry {
   private Either<ApiResponse, InputStream> respondWithProcessedResource(
       final Context context, final String uri, final Source source) {
     context.res().setCharacterEncoding("UTF-8");
-    Either<IOException, InputStream> supplied = resourceResolver.resolve(uri, source).supply();
+
+    Either<IOException, InputStream> supplied =
+        ofNullable(resourceResolver.resolve(uri, source))
+            .map(ResourceSupplier::supply)
+            .orElse(null);
+
     if (supplied == null) {
       return notFoundError(uri);
     }
+
     if (supplied.isLeft()) {
       return internalServerError("Cannot supply resource: " + uri);
     }
-    return Either.right(supplied.right());
+
+    return right(supplied.right());
   }
 
   private Either<ApiResponse, InputStream> respondWithRawResource(final Source source) {
     InputStream in = source.get();
-    return (in != null) ? Either.right(in) : notFoundError("Resource not found");
+    return (in != null) ? right(in) : notFoundError("Resource not found");
   }
 
   private String getExtension(final String uri) {

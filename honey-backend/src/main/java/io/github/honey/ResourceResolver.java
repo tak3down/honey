@@ -1,23 +1,58 @@
 package io.github.honey;
 
-import java.io.InputStream;
+import static java.nio.charset.StandardCharsets.UTF_8;
+
+import java.io.*;
 import org.slf4j.LoggerFactory;
 
 final class ResourceResolver {
 
+  private final HoneyConfig honeyConfig;
+
+  ResourceResolver(HoneyConfig honeyConfig) {
+    this.honeyConfig = honeyConfig;
+  }
+
   ResourceSupplier resolve(final String uri, final Source source) {
     try {
-      final InputStream input = source.get();
-      if (input == null) {
-        System.out.println("Resource not found: " + uri);
-        return null;
+      final InputStream originalStream = source.get();
+      if (originalStream == null) {
+        return null; // Javalin will treat this as “not found”
       }
 
-      return () -> Either.right(input);
-    } catch (final Exception exception) {
+      if (uri.endsWith(".html") || uri.endsWith(".js")) {
+        byte[] rawBytes = toByteArray(originalStream);
+
+        String textContent = new String(rawBytes, UTF_8);
+
+        textContent = textContent.replace("{{HONEY.PORT}}", String.valueOf(honeyConfig.port));
+        textContent =
+            textContent.replace("{{HONEY.SSL_PORT}}", String.valueOf(honeyConfig.sslPort));
+        textContent = textContent.replace("{{HONEY.FORWARED_IP}}", honeyConfig.forwardedIp);
+
+        byte[] replacedBytes = textContent.getBytes(UTF_8);
+
+        return () -> Either.right(new ByteArrayInputStream(replacedBytes));
+      }
+
+      // 3) Otherwise (binary/CSS/images/etc), just hand back the raw stream
+      return () -> Either.right(originalStream);
+
+    } catch (final Exception ex) {
       LoggerFactory.getLogger(ResourceResolver.class)
-          .error("Failed to resolve resource", exception);
+          .error("Failed to resolve resource {}", uri, ex);
       return null;
     }
+  }
+
+  /** Utility to read an InputStream completely into a byte[]. */
+  private byte[] toByteArray(InputStream in) throws IOException {
+    ByteArrayOutputStream buffer = new ByteArrayOutputStream();
+    byte[] tmp = new byte[4 * 1024];
+    int read;
+    while ((read = in.read(tmp)) != -1) {
+      buffer.write(tmp, 0, read);
+    }
+    return buffer.toByteArray();
   }
 }

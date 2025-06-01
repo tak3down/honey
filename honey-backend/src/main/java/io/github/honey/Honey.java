@@ -108,7 +108,7 @@ public final class Honey {
     final AuthController authController = new AuthController(userDetailsService);
     dslRoutes.addAll(authController.routes());
 
-    final ResourceResolver resourceResolver = new ResourceResolver();
+    final ResourceResolver resourceResolver = new ResourceResolver(honeyConfig);
 
     final ResourceController resourceController = new ResourceController(resourceResolver);
     dslRoutes.addAll(resourceController.routes());
