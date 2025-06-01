@@ -32,8 +32,8 @@ interface LeaderboardEntry {
 
 const API_BASE = '{{HONEY.API_BASE}}/api';
 
-export default function FlagGame() {
-    const [currentPage, setCurrentPage] = useState<'menu' | 'auth' | 'game' | 'results' | 'ranking'>('menu');
+export default function Honey() {
+    const [currentPage, setCurrentPage] = useState<'home' | 'auth' | 'game' | 'results' | 'ranking'>('home');
     const [user, setUser] = useState<User | null>(null);
     const [gameSession, setGameSession] = useState<GameSession | null>(null);
     const [username, setUsername] = useState('');
@@ -72,7 +72,7 @@ export default function FlagGame() {
                 const userData = await response.json();
                 localStorage.setItem('user', JSON.stringify(userData));
                 setUser(userData);
-                setCurrentPage('menu');
+                setCurrentPage('home');
             } else {
                 alert(isLogin ? 'Nieprawidłowe dane logowania' : 'Nazwa użytkownika już istnieje');
             }
@@ -179,7 +179,7 @@ export default function FlagGame() {
         localStorage.removeItem('user');
         setUser(null);
         setGameSession(null);
-        setCurrentPage('menu');
+        setCurrentPage('home');
         setUsername('');
         setPassword('');
     };
@@ -197,7 +197,7 @@ export default function FlagGame() {
 
                 <div className="flex items-center space-x-6">
                     <button
-                        onClick={() => setCurrentPage('menu')}
+                        onClick={() => setCurrentPage('home')}
                         className="text-slate-300 hover:text-white px-3 py-2 rounded-lg hover:bg-slate-700/50 transition-all duration-200"
                     >
                         Strona główna
@@ -230,7 +230,7 @@ export default function FlagGame() {
         </div>
     </nav>);
 
-    const renderMenu = () => (<div className="min-h-screen bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900">
+    const renderHome = () => (<div className="min-h-screen bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900">
         <Navbar/>
         <div className="flex items-center justify-center min-h-[calc(100vh-4rem)] px-4">
             <div
@@ -474,7 +474,7 @@ export default function FlagGame() {
                         </button>
 
                         <button
-                            onClick={() => setCurrentPage('menu')}
+                            onClick={() => setCurrentPage('home')}
                             className="w-full bg-gradient-to-r from-slate-600 to-slate-700 hover:from-slate-700 hover:to-slate-800 text-white font-bold py-4 px-8 rounded-xl transition-all duration-200 shadow-lg"
                         >
                             🏠 Strona Główna
@@ -546,8 +546,8 @@ export default function FlagGame() {
         </div>);
 
     switch (currentPage) {
-        case 'menu':
-            return renderMenu();
+        case 'home':
+            return renderHome();
         case 'auth':
             return renderAuth();
         case 'game':
@@ -557,7 +557,7 @@ export default function FlagGame() {
         case 'ranking':
             return renderRanking();
         default:
-            return renderMenu();
+            return renderHome();
     }
 
     function parseLocalDateTime(array: number[]): Date {
