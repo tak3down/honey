@@ -1,6 +1,7 @@
 package io.github.honey;
 
 import java.util.regex.Pattern;
+import org.intellij.lang.annotations.Language;
 
 final class NotFoundTemplate {
 
@@ -8,18 +9,18 @@ final class NotFoundTemplate {
 
   private NotFoundTemplate() {}
 
-  static String createNotFoundPage(final String details) {
+  static @Language("html") String createNotFoundPage(final String details) {
     return """
-        <html lang="en">
+        <html lang="pl">
           <head>
             <meta charset="UTF-8" />
-            <title>404 — Not Found</title>
+            <title>404 — Nie znaleziono</title>
             <style>
               body {
                 margin: 0;
                 padding: 0;
                 height: 100vh;
-                background: radial-gradient(circle at center, #0f0f0f 0%, #000000 100%);
+                background: radial-gradient(circle at center, #0a0a0a 0%, #000 100%);
                 display: flex;
                 justify-content: center;
                 align-items: center;
@@ -138,25 +139,104 @@ final class NotFoundTemplate {
           </head>
           <body>
             <div class="container">
-              <h1 class="glitch" data-text="404 NOT FOUND">404 NOT FOUND</h1>
-              <p>You’ve stumbled into the void.</p>
+              <h1 class="glitch" data-text="404 NIE ZNALEZIONO">404 NIE ZNALEZIONO</h1>
+              <p>Wpadłeś w cyfrową otchłań.</p>
               <div class="not-found-info">
                 {{DETAILS}}
               </div>
               <div class="ascii">
                 {\\\\__/}<br>
                 (⚆_⚆)<br>
-                ( >🔧 )<br>
+                ( >💾 )<br>
               </div>
-              <a href="/">Return to safety</a>
+              <a href="/">Powrót do bezpieczeństwa</a>
             </div>
           </body>
+          <footer style="
+            position: absolute;
+            bottom: 10px;
+            width: 100%;
+            text-align: center;
+            font-size: 0.85rem;
+            font-family: 'Courier New', monospace;
+            color: #ff55aa;
+            opacity: 0.8;
+            letter-spacing: 0.05em;
+          ">
+            <div style="
+              border-top: 1px solid rgba(255, 85, 170, 0.1);
+              margin: 0 auto;
+              width: 60%;
+              padding-top: 0.5rem;
+              animation: glowFooter 2s ease-in-out infinite alternate;
+            ">
+              &copy; <span class="footer-glitch" data-text="2025 Sergiusz M">2025 Sergiusz Męcina — Coded in shadows</span>
+            </div>
+
+            <style>
+              .footer-glitch {
+                position: relative;
+                display: inline-block;
+                color: #ff55aa;
+              }
+
+              .footer-glitch::before,
+              .footer-glitch::after {
+                content: attr(data-text);
+                position: absolute;
+                left: 0;
+                width: 100%;
+                overflow: hidden;
+              }
+
+              .footer-glitch::before {
+                color: #00ffe7;
+                clip: rect(0, 0, 0, 0);
+                animation: glitchFooterTop 2.5s infinite linear alternate-reverse;
+              }
+
+              .footer-glitch::after {
+                color: #ff00c8;
+                clip: rect(0, 0, 0, 0);
+                animation: glitchFooterBottom 2.5s infinite linear alternate-reverse;
+              }
+
+              @keyframes glitchFooterTop {
+                0% {
+                  clip: rect(0, 900px, 0, 0);
+                }
+                100% {
+                  clip: rect(0, 900px, 10px, 0);
+                  transform: translate(-1px, -1px);
+                }
+              }
+
+              @keyframes glitchFooterBottom {
+                0% {
+                  clip: rect(0, 900px, 0, 0);
+                }
+                100% {
+                  clip: rect(12px, 900px, 22px, 0);
+                  transform: translate(1px, 1px);
+                }
+              }
+
+              @keyframes glowFooter {
+                from {
+                  text-shadow: 0 0 2px #ff55aa, 0 0 5px #ff55aa44, 0 0 10px #ff55aa22;
+                }
+                to {
+                  text-shadow: 0 0 4px #ff55aa, 0 0 8px #ff55aa88, 0 0 16px #ff55aa33;
+                }
+              }
+            </style>
+          </footer>
         </html>
         """
         .replace(
             "{{DETAILS}}",
             details.isEmpty()
-                ? ""
-                : "<p><i>" + XSS_FILTER.matcher(details).replaceAll("") + "</i></p>");
+                ? "<p><i>Nie podano żadnych szczegółów.</i></p>"
+                : "<p><i>Ścieżka: " + XSS_FILTER.matcher(details).replaceAll("") + "</i></p>");
   }
 }
