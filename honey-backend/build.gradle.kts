@@ -16,7 +16,6 @@ dependencies {
 
     val javalin = "6.5.0"
     api("io.javalin:javalin:$javalin")
-    api("io.javalin.community.ssl:ssl-plugin:$javalin")
     api("io.javalin.community.routing:routing-dsl:$javalin")
 
     val jackson = "2.18.3"

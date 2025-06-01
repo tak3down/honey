@@ -43,7 +43,6 @@ final class ResourceResolver {
     textContent = textContent.replace("{{HONEY.PORT}}", String.valueOf(honeyConfig.port));
     textContent = textContent.replace("{{HONEY.HOST}}", String.valueOf(honeyConfig.host));
     textContent = textContent.replace("{{HONEY.API_BASE}}", String.valueOf(honeyConfig.apiBase));
-    textContent = textContent.replace("{{HONEY.SSL_PORT}}", String.valueOf(honeyConfig.sslPort));
     textContent = textContent.replace("{{HONEY.FORWARED_IP}}", honeyConfig.forwardedIp);
 
     return textContent.getBytes(UTF_8);

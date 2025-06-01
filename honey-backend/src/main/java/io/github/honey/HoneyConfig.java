@@ -19,10 +19,6 @@ public final class HoneyConfig {
   public int port;
   public String apiBase;
 
-  public boolean useSsl;
-  public boolean enforceSsl;
-  public int sslPort;
-
   public String forwardedIp;
 
   public Map<String, String> countryFlags = new HashMap<>();
@@ -62,10 +58,6 @@ public final class HoneyConfig {
     host = "0.0.0.0";
     apiBase = "http://localhost:80";
     port = 80;
-
-    useSsl = false;
-    enforceSsl = false;
-    sslPort = 443;
 
     // CF-Connecting-IP OR X-Real-IP
     forwardedIp = "X-Real-IP";

@@ -12,12 +12,10 @@ import com.fasterxml.jackson.databind.json.JsonMapper;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import io.javalin.Javalin;
 import io.javalin.community.routing.dsl.DslRoute;
-import io.javalin.community.ssl.SslPlugin;
 import io.javalin.http.Context;
 import io.javalin.http.NotFoundResponse;
 import io.javalin.json.JavalinJackson;
 import io.javalin.plugin.bundled.CorsPluginConfig.CorsRule;
-import io.javalin.plugin.bundled.SslRedirectPlugin;
 import java.util.HashSet;
 import java.util.ServiceLoader;
 import java.util.Set;
@@ -59,32 +57,6 @@ public final class Honey {
                           .orElseGet(() -> request.req().getRemoteAddr());
 
               javalinConfig.jsonMapper(new JavalinJackson(jsonMapper, false));
-
-              if (honeyConfig.useSsl) {
-                javalinConfig.registerPlugin(
-                    new SslPlugin(
-                        sslConfig -> {
-                          sslConfig.insecure = true;
-                          sslConfig.insecurePort = honeyConfig.port;
-
-                          sslConfig.secure = true;
-                          sslConfig.securePort = honeyConfig.sslPort;
-
-                          sslConfig.configConnectors(
-                              serverConnector ->
-                                  serverConnector.setIdleTimeout(ofMinutes(10L).toMillis()));
-                          sslConfig.sniHostCheck = false;
-                        }));
-              }
-
-              if (honeyConfig.enforceSsl) {
-                javalinConfig.registerPlugin(
-                    new SslRedirectPlugin(
-                        sslRedirectConfig -> {
-                          sslRedirectConfig.redirectOnLocalhost = true;
-                          sslRedirectConfig.sslPort = honeyConfig.sslPort;
-                        }));
-              }
 
               javalinConfig.bundledPlugins.enableCors(
                   corsPluginConfig -> corsPluginConfig.addRule(CorsRule::anyHost));
