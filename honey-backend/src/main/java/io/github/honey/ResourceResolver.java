@@ -35,9 +35,9 @@ final class ResourceResolver {
 
       return () -> Either.right(originalStream);
 
-    } catch (final Exception ex) {
+    } catch (final Exception exception) {
       LoggerFactory.getLogger(ResourceResolver.class)
-          .error("Failed to resolve resource {}", uri, ex);
+          .error("Failed to resolve resource {}", uri, exception);
       return null;
     }
   }
