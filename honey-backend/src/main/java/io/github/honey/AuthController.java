@@ -1,10 +1,12 @@
 package io.github.honey;
 
-import static io.github.honey.ApiResponse.badRequestError;
-import static io.github.honey.Either.right;
 import static io.github.honey.HoneyController.responseEither;
+import static io.github.honey.shared.ApiResponse.badRequestError;
+import static io.github.honey.shared.Either.right;
+import static io.javalin.community.routing.Route.POST;
 
-import io.javalin.community.routing.Route;
+import io.github.honey.shared.ApiResponse;
+import io.github.honey.shared.Either;
 import io.javalin.http.Context;
 
 final class AuthController extends HoneyControllerRegistry {
@@ -14,8 +16,9 @@ final class AuthController extends HoneyControllerRegistry {
   AuthController(final UserDetailsService userDetailsService) {
     this.userDetailsService = userDetailsService;
 
-    routes(new HoneyController("/api/auth/login", responseEither(this::login), Route.POST));
-    routes(new HoneyController("/api/auth/register", responseEither(this::register), Route.POST));
+    routes(
+        new HoneyController("/api/auth/login", responseEither(this::login), POST),
+        new HoneyController("/api/auth/register", responseEither(this::register), POST));
   }
 
   private Either<ApiResponse, UserDetails> login(final Context context) {

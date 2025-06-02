@@ -1,11 +1,13 @@
 package io.github.honey;
 
+import static java.util.regex.Pattern.compile;
+
 import java.util.regex.Pattern;
 import org.intellij.lang.annotations.Language;
 
 final class NotFoundTemplate {
 
-  private static final Pattern XSS_FILTER = Pattern.compile("[^A-Za-z0-9/._\\- ]");
+  private static final Pattern XSS_FILTER = compile("[^A-Za-z0-9/._\\- ]");
 
   private NotFoundTemplate() {}
 

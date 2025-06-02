@@ -1,11 +1,11 @@
 package io.github.honey;
 
+import static com.fasterxml.jackson.annotation.JsonInclude.Include.NON_NULL;
+import static com.fasterxml.jackson.databind.DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES;
 import static io.javalin.util.ConcurrencyUtil.jettyThreadPool;
 import static java.time.Duration.ofMinutes;
 import static java.util.Optional.ofNullable;
 
-import com.fasterxml.jackson.annotation.JsonInclude;
-import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.deser.DeserializationProblemHandler;
 import com.fasterxml.jackson.databind.json.JsonMapper;
@@ -34,8 +34,8 @@ public final class Honey {
         JsonMapper.builder()
             .addModule(new JavaTimeModule())
             .build()
-            .setSerializationInclusion(JsonInclude.Include.NON_NULL)
-            .configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
+            .setSerializationInclusion(NON_NULL)
+            .configure(FAIL_ON_UNKNOWN_PROPERTIES, false);
     ServiceLoader.load(DeserializationProblemHandler.class).forEach(jsonMapper::addHandler);
 
     final Set<DslRoute<Context, Object>> dslRoutes = new HashSet<>();
@@ -88,28 +88,30 @@ public final class Honey {
     registerRoutes(javalin, dslRoutes);
   }
 
-  private void registerRoutes(
-      final Javalin javalin, final Set<DslRoute<Context, Object>> dslRoutes) {
-    for (final DslRoute<Context, Object> route : dslRoutes) {
-      switch (route.getMethod()) {
-        case HEAD -> javalin.head(route.getPath(), route.getHandler()::invoke);
-        case PATCH -> javalin.patch(route.getPath(), route.getHandler()::invoke);
-        case OPTIONS -> javalin.options(route.getPath(), route.getHandler()::invoke);
-        case GET -> javalin.get(route.getPath(), route.getHandler()::invoke);
-        case PUT -> javalin.put(route.getPath(), route.getHandler()::invoke);
-        case POST -> javalin.post(route.getPath(), route.getHandler()::invoke);
-        case DELETE -> javalin.delete(route.getPath(), route.getHandler()::invoke);
-        case AFTER -> javalin.after(route.getPath(), route.getHandler()::invoke);
-        case AFTER_MATCHED -> javalin.afterMatched(route.getPath(), route.getHandler()::invoke);
-        case BEFORE -> javalin.before(route.getPath(), route.getHandler()::invoke);
-        case BEFORE_MATCHED -> javalin.beforeMatched(route.getPath(), route.getHandler()::invoke);
-      }
-    }
-  }
-
   public void stop() {
     if (javalin != null) {
       javalin.stop();
     }
+  }
+
+  private void registerRoutes(
+      final Javalin javalin, final Set<DslRoute<Context, Object>> dslRoutes) {
+    dslRoutes.forEach(
+        route -> {
+          switch (route.getMethod()) {
+            case HEAD -> javalin.head(route.getPath(), route.getHandler()::invoke);
+            case PATCH -> javalin.patch(route.getPath(), route.getHandler()::invoke);
+            case OPTIONS -> javalin.options(route.getPath(), route.getHandler()::invoke);
+            case GET -> javalin.get(route.getPath(), route.getHandler()::invoke);
+            case PUT -> javalin.put(route.getPath(), route.getHandler()::invoke);
+            case POST -> javalin.post(route.getPath(), route.getHandler()::invoke);
+            case DELETE -> javalin.delete(route.getPath(), route.getHandler()::invoke);
+            case AFTER -> javalin.after(route.getPath(), route.getHandler()::invoke);
+            case AFTER_MATCHED -> javalin.afterMatched(route.getPath(), route.getHandler()::invoke);
+            case BEFORE -> javalin.before(route.getPath(), route.getHandler()::invoke);
+            case BEFORE_MATCHED ->
+                javalin.beforeMatched(route.getPath(), route.getHandler()::invoke);
+          }
+        });
   }
 }

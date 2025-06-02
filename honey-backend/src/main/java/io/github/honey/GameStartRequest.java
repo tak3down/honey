@@ -17,7 +17,8 @@ public final class GameStartRequest {
     return username;
   }
 
-  public void setUsername(final String username) {
-    this.username = username;
+  @Override
+  public String toString() {
+    return "GameStartRequest{" + "username='" + username + '\'' + '}';
   }
 }

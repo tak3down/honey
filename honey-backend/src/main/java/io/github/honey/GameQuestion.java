@@ -1,13 +1,16 @@
 package io.github.honey;
 
+import com.fasterxml.jackson.annotation.JsonCreator;
 import java.util.List;
 
-public class GameQuestion {
+public final class GameQuestion {
+
   private String flagUrl;
   private String correctCountry;
   private List<String> options;
   private int questionNumber;
 
+  @JsonCreator
   public GameQuestion() {}
 
   public GameQuestion(
@@ -25,31 +28,31 @@ public class GameQuestion {
     return flagUrl;
   }
 
-  public void setFlagUrl(final String flagUrl) {
-    this.flagUrl = flagUrl;
-  }
-
   public String getCorrectCountry() {
     return correctCountry;
-  }
-
-  public void setCorrectCountry(final String correctCountry) {
-    this.correctCountry = correctCountry;
   }
 
   public List<String> getOptions() {
     return options;
   }
 
-  public void setOptions(final List<String> options) {
-    this.options = options;
-  }
-
   public int getQuestionNumber() {
     return questionNumber;
   }
 
-  public void setQuestionNumber(final int questionNumber) {
-    this.questionNumber = questionNumber;
+  @Override
+  public String toString() {
+    return "GameQuestion{"
+        + "flagUrl='"
+        + flagUrl
+        + '\''
+        + ", correctCountry='"
+        + correctCountry
+        + '\''
+        + ", options="
+        + options
+        + ", questionNumber="
+        + questionNumber
+        + '}';
   }
 }

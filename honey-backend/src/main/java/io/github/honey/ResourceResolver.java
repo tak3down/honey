@@ -2,6 +2,7 @@ package io.github.honey;
 
 import static java.nio.charset.StandardCharsets.UTF_8;
 
+import io.github.honey.shared.Either;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
@@ -17,7 +18,8 @@ final class ResourceResolver {
     this.honeyConfig = honeyConfig;
   }
 
-  ResourceSupplier resolve(final String uri, final Supplier<InputStream> resourceSource) {
+  Supplier<Either<IOException, InputStream>> resolve(
+      final String uri, final Supplier<InputStream> resourceSource) {
     try {
       final InputStream originalStream = resourceSource.get();
       if (originalStream == null) {

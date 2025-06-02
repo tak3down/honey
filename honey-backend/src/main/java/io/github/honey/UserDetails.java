@@ -1,10 +1,13 @@
 package io.github.honey;
 
+import com.fasterxml.jackson.annotation.JsonCreator;
+
 public final class UserDetails {
+
   private String username;
   private String password;
-  private String currentSessionId;
 
+  @JsonCreator
   public UserDetails() {}
 
   public UserDetails(final String username, final String password) {
@@ -16,23 +19,7 @@ public final class UserDetails {
     return username;
   }
 
-  public void setUsername(final String username) {
-    this.username = username;
-  }
-
   public String getPassword() {
     return password;
-  }
-
-  public void setPassword(final String password) {
-    this.password = password;
-  }
-
-  public String getCurrentSessionId() {
-    return currentSessionId;
-  }
-
-  public void setCurrentSessionId(final String currentSessionId) {
-    this.currentSessionId = currentSessionId;
   }
 }

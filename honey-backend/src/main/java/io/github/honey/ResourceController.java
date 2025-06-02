@@ -1,13 +1,15 @@
 package io.github.honey;
 
-import static io.github.honey.ApiResponse.internalServerError;
-import static io.github.honey.ApiResponse.notFoundError;
-import static io.github.honey.Either.right;
 import static io.github.honey.HoneyController.responseEither;
+import static io.github.honey.shared.ApiResponse.internalServerError;
+import static io.github.honey.shared.ApiResponse.notFoundError;
+import static io.github.honey.shared.Either.right;
 import static io.javalin.community.routing.Route.GET;
 import static io.javalin.http.ContentType.OCTET_STREAM;
 import static java.util.Optional.ofNullable;
 
+import io.github.honey.shared.ApiResponse;
+import io.github.honey.shared.Either;
 import io.javalin.http.ContentType;
 import io.javalin.http.Context;
 import java.io.IOException;
@@ -29,35 +31,29 @@ final class ResourceController extends HoneyControllerRegistry {
   }
 
   private void registerRoutes() {
-    try {
+    final Set<String> resourcePaths = listResources();
 
-      final Set<String> resourcePaths = listResources();
+    final Set<String> registeredPaths = new HashSet<>();
+    final Set<HoneyController> controllers = new HashSet<>();
 
-      final Set<String> registeredPaths = new HashSet<>();
-      final Set<HoneyController> controllers = new HashSet<>();
+    final HoneyController index = indexHandler();
+    controllers.add(index);
+    registeredPaths.add(index.path());
 
-      final HoneyController index = indexHandler();
-      controllers.add(index);
-      registeredPaths.add(index.path());
-
-      for (final String resourcePath : resourcePaths) {
-        final HoneyController controller;
-        if (resourcePath.endsWith("/")) {
-          controller = directoryHandler(resourcePath);
-        } else {
-          controller = rootFileHandler(resourcePath);
-        }
-
-        if (registeredPaths.add(controller.path())) {
-          controllers.add(controller);
-        }
+    for (final String resourcePath : resourcePaths) {
+      final HoneyController controller;
+      if (resourcePath.endsWith("/")) {
+        controller = directoryHandler(resourcePath);
+      } else {
+        controller = rootFileHandler(resourcePath);
       }
 
-      routes(controllers.toArray(HoneyController[]::new));
-
-    } catch (final Exception ex) {
-      throw new IllegalStateException(ex);
+      if (registeredPaths.add(controller.path())) {
+        controllers.add(controller);
+      }
     }
+
+    routes(controllers.toArray(HoneyController[]::new));
   }
 
   private HoneyController rootFileHandler(final String resourcePath) {
@@ -118,25 +114,25 @@ final class ResourceController extends HoneyControllerRegistry {
   }
 
   private Either<ApiResponse, InputStream> respondWithResource(
-      final Context context, final String uri, final Supplier<InputStream> resourceSource) {
+      final Context context, final String uri, final Supplier<InputStream> inputStreamSupplier) {
 
     final ContentType contentType = ContentType.getContentTypeByExtension(getExtension(uri));
     context.contentType(contentType != null ? contentType.getMimeType() : OCTET_STREAM);
 
     if (uri.endsWith(".html") || uri.endsWith(".js")) {
-      return respondWithProcessedResource(context, uri, resourceSource);
+      return respondWithProcessedResource(context, uri, inputStreamSupplier);
     } else {
-      return respondWithRawResource(resourceSource);
+      return respondWithRawResource(inputStreamSupplier);
     }
   }
 
   private Either<ApiResponse, InputStream> respondWithProcessedResource(
-      final Context context, final String uri, final Supplier<InputStream> resourceSource) {
+      final Context context, final String uri, final Supplier<InputStream> inputStreamSupplier) {
     context.res().setCharacterEncoding("UTF-8");
 
     final Either<IOException, InputStream> supplied =
-        ofNullable(resourceResolver.resolve(uri, resourceSource))
-            .map(ResourceSupplier::supply)
+        ofNullable(resourceResolver.resolve(uri, inputStreamSupplier))
+            .map(Supplier::get)
             .orElse(null);
 
     if (supplied == null) {
@@ -151,9 +147,9 @@ final class ResourceController extends HoneyControllerRegistry {
   }
 
   private Either<ApiResponse, InputStream> respondWithRawResource(
-      final Supplier<InputStream> resourceSource) {
-    final InputStream in = resourceSource.get();
-    return in != null ? right(in) : notFoundError("Resource not found");
+      final Supplier<InputStream> inputStreamSupplier) {
+    final InputStream inputStream = inputStreamSupplier.get();
+    return inputStream != null ? right(inputStream) : notFoundError("Resource not found");
   }
 
   private String getExtension(final String uri) {
@@ -161,7 +157,8 @@ final class ResourceController extends HoneyControllerRegistry {
     return lastDot != -1 ? uri.substring(lastDot + 1) : "";
   }
 
-  private Set<String> listResources() throws IOException {
+  private Set<String> listResources() {
+
     final Set<String> resources = new HashSet<>();
     final String path = "static";
     final String jarPath = getClass().getClassLoader().getResource(path).getPath();
@@ -178,7 +175,10 @@ final class ResourceController extends HoneyControllerRegistry {
           resources.add(name);
         }
       }
+    } catch (final Exception exception) {
+      throw new ResourceException("Failed to iterate through jar file resources", exception);
     }
+
     return resources;
   }
 }

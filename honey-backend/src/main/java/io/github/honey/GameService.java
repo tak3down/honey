@@ -27,6 +27,24 @@ final class GameService {
     countries.addAll(honeyConfig.countryFlags.keySet());
   }
 
+  GameSession getActiveSessionById(final String sessionId) {
+    return activeSessions.get(sessionId);
+  }
+
+  List<LeaderboardEntry> getLeaderboard() {
+    return leaderboard.stream()
+        .sorted(
+            (a, b) -> {
+              final int scoreCompare = Integer.compare(b.getScore(), a.getScore());
+              if (scoreCompare == 0) {
+                return Long.compare(a.getTimeElapsed(), b.getTimeElapsed());
+              }
+              return scoreCompare;
+            })
+        .limit(MAX_LEADERBOARD_SIZE)
+        .collect(toList());
+  }
+
   GameSession startNewGame(final String username) {
     final String sessionId = UUID.randomUUID().toString();
     final GameSession session = new GameSession(sessionId, username);
@@ -35,6 +53,7 @@ final class GameService {
     session.setCurrentQuestion(firstQuestion);
 
     activeSessions.put(sessionId, session);
+
     return session;
   }
 
@@ -132,23 +151,5 @@ final class GameService {
     shuffle(options);
 
     return new GameQuestion(flagUrl, correctCountry, options, questionNumber);
-  }
-
-  List<LeaderboardEntry> getLeaderboard() {
-    return leaderboard.stream()
-        .sorted(
-            (a, b) -> {
-              final int scoreCompare = Integer.compare(b.getScore(), a.getScore());
-              if (scoreCompare == 0) {
-                return Long.compare(a.getTimeElapsed(), b.getTimeElapsed());
-              }
-              return scoreCompare;
-            })
-        .limit(MAX_LEADERBOARD_SIZE)
-        .collect(toList());
-  }
-
-  GameSession getSession(final String sessionId) {
-    return activeSessions.get(sessionId);
   }
 }

@@ -19,15 +19,12 @@ public final class AnswerRequest {
     return sessionId;
   }
 
-  public void setSessionId(final String sessionId) {
-    this.sessionId = sessionId;
-  }
-
   public String getAnswer() {
     return answer;
   }
 
-  public void setAnswer(final String answer) {
-    this.answer = answer;
+  @Override
+  public String toString() {
+    return "AnswerRequest{" + "sessionId='" + sessionId + '\'' + ", answer='" + answer + '\'' + '}';
   }
 }

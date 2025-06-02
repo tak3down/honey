@@ -1,15 +1,18 @@
 package io.github.honey;
 
+import com.fasterxml.jackson.annotation.JsonCreator;
 import java.time.LocalDateTime;
 import java.util.Objects;
 import org.jetbrains.annotations.NotNull;
 
 public final class LeaderboardEntry implements Comparable<LeaderboardEntry> {
+
   private String username;
   private int score;
   private long timeElapsed;
   private LocalDateTime completedAt;
 
+  @JsonCreator
   public LeaderboardEntry() {}
 
   public LeaderboardEntry(
@@ -25,10 +28,6 @@ public final class LeaderboardEntry implements Comparable<LeaderboardEntry> {
 
   public String getUsername() {
     return username;
-  }
-
-  public void setUsername(final String username) {
-    this.username = username;
   }
 
   public int getScore() {

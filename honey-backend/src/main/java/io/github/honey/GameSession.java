@@ -1,6 +1,9 @@
 package io.github.honey;
 
+import com.fasterxml.jackson.annotation.JsonCreator;
+
 public final class GameSession {
+
   private String sessionId;
   private String username;
   private int score;
@@ -11,6 +14,7 @@ public final class GameSession {
   private GameQuestion currentQuestion;
   private int questionNumber;
 
+  @JsonCreator
   public GameSession() {}
 
   public GameSession(final String sessionId, final String username) {
@@ -93,5 +97,31 @@ public final class GameSession {
 
   public void setQuestionNumber(final int questionNumber) {
     this.questionNumber = questionNumber;
+  }
+
+  @Override
+  public String toString() {
+    return "GameSession{"
+        + "sessionId='"
+        + sessionId
+        + '\''
+        + ", username='"
+        + username
+        + '\''
+        + ", score="
+        + score
+        + ", totalQuestions="
+        + totalQuestions
+        + ", startTime="
+        + startTime
+        + ", endTime="
+        + endTime
+        + ", isFinished="
+        + isFinished
+        + ", currentQuestion="
+        + currentQuestion
+        + ", questionNumber="
+        + questionNumber
+        + '}';
   }
 }

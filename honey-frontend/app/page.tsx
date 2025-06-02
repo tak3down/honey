@@ -4,7 +4,7 @@ import React, {useEffect, useState} from 'react';
 
 interface User {
     username: string;
-    sessionId?: string;
+    password: string;
 }
 
 interface GameQuestion {

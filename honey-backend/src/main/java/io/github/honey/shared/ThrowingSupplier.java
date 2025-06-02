@@ -1,4 +1,4 @@
-package io.github.honey;
+package io.github.honey.shared;
 
 import java.util.function.Supplier;
 
