@@ -49,7 +49,7 @@ final class GameService {
     final String sessionId = UUID.randomUUID().toString();
     final GameSession session = new GameSession(sessionId, username);
 
-    final GameQuestion firstQuestion = generateQuestion(1);
+    final GameQuestion firstQuestion = generateQuestion(session, 1);
     session.setCurrentQuestion(firstQuestion);
 
     activeSessions.put(sessionId, session);
@@ -73,7 +73,7 @@ final class GameService {
     } else {
 
       final int nextQuestionNumber = session.getQuestionNumber() + 1;
-      final GameQuestion nextQuestion = generateQuestion(nextQuestionNumber);
+      final GameQuestion nextQuestion = generateQuestion(session, nextQuestionNumber);
 
       session.setCurrentQuestion(nextQuestion);
       session.setQuestionNumber(nextQuestionNumber);
@@ -130,9 +130,22 @@ final class GameService {
     activeSessions.remove(session.getSessionId());
   }
 
-  private GameQuestion generateQuestion(final int questionNumber) {
+  private GameQuestion generateQuestion(final GameSession session, final int questionNumber) {
+
+    // used to avoid repetition of countries in session
+    // for a better user experience:D
+
+    final List<String> countriesLeft = session.getCountriesLeft();
+    if (countriesLeft.isEmpty()) {
+      countriesLeft.addAll(countries);
+    }
+
     final String correctCountry =
-        countries.get(ThreadLocalRandom.current().nextInt(countries.size()));
+        countriesLeft.get(ThreadLocalRandom.current().nextInt(countriesLeft.size()));
+
+    // remove pooled country
+    countriesLeft.remove(correctCountry);
+
     final String flagUrl = countryFlags.get(correctCountry);
 
     final List<String> options = new ArrayList<>();

@@ -1,6 +1,8 @@
 package io.github.honey;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
+import java.util.LinkedList;
+import java.util.List;
 
 public final class GameSession {
 
@@ -13,6 +15,7 @@ public final class GameSession {
   private boolean isFinished;
   private GameQuestion currentQuestion;
   private int questionNumber;
+  private List<String> countriesLeft;
 
   @JsonCreator
   public GameSession() {}
@@ -25,6 +28,7 @@ public final class GameSession {
     this.startTime = System.currentTimeMillis();
     this.isFinished = false;
     this.questionNumber = 1;
+    this.countriesLeft = new LinkedList<>();
   }
 
   public String getSessionId() {
@@ -99,6 +103,14 @@ public final class GameSession {
     this.questionNumber = questionNumber;
   }
 
+  public List<String> getCountriesLeft() {
+    return countriesLeft;
+  }
+
+  public void setCountriesLeft(final List<String> countriesLeft) {
+    this.countriesLeft = countriesLeft;
+  }
+
   @Override
   public String toString() {
     return "GameSession{"
@@ -122,6 +134,8 @@ public final class GameSession {
         + currentQuestion
         + ", questionNumber="
         + questionNumber
+        + ", countriesLeft="
+        + countriesLeft
         + '}';
   }
 }
