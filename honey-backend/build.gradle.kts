@@ -14,7 +14,7 @@ dependencies {
     val slf4j = "2.0.17"
     api("org.slf4j:slf4j-simple:$slf4j")
 
-    val javalin = "6.5.0"
+    val javalin = "6.6.0"
     api("io.javalin:javalin:$javalin")
     api("io.javalin.community.routing:routing-dsl:$javalin")
 
