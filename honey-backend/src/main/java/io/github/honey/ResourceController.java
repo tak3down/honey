@@ -71,7 +71,9 @@ final class ResourceController extends HoneyControllerRegistry {
     }
 
     return new HoneyController(
-        webPath, responseEither(ctx -> respondWithBundledResource(ctx, stripLeadingStatic)), GET);
+        webPath,
+        responseEither(context -> respondWithBundledResource(context, stripLeadingStatic)),
+        GET);
   }
 
   private String fixPath(final String path) {
@@ -88,8 +90,8 @@ final class ResourceController extends HoneyControllerRegistry {
     return new HoneyController(
         routePattern,
         responseEither(
-            ctx -> {
-              final String fileName = ctx.pathParam("path");
+            context -> {
+              final String fileName = context.pathParam("path");
               final String fullPath = directoryPath + fileName;
 
               final String stripLeadingStatic;
@@ -99,14 +101,14 @@ final class ResourceController extends HoneyControllerRegistry {
                 stripLeadingStatic = fullPath;
               }
 
-              return respondWithBundledResource(ctx, stripLeadingStatic);
+              return respondWithBundledResource(context, stripLeadingStatic);
             }),
         GET);
   }
 
   private HoneyController indexHandler() {
     return new HoneyController(
-        "/", responseEither(ctx -> respondWithBundledResource(ctx, "index.html")), GET);
+        "/", responseEither(context -> respondWithBundledResource(context, "index.html")), GET);
   }
 
   private Either<ApiResponse, InputStream> respondWithBundledResource(
