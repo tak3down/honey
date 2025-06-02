@@ -8,8 +8,10 @@ public final class HoneyLauncher {
 
   public static void main(final String[] args) {
     final Honey honey = new Honey();
-    new Thread((SafeRunnable) honey::start).start();
+    final Thread thread = new Thread((SafeRunnable) honey::start);
+    thread.setName("Honey | Main Thread");
     Runtime.getRuntime().addShutdownHook(new Thread((SafeRunnable) honey::stop));
+    thread.start();
   }
 
   @FunctionalInterface

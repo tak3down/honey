@@ -40,7 +40,7 @@ public final class Honey {
 
     final Set<DslRoute<Context, Object>> dslRoutes = new HashSet<>();
 
-    final ThreadPool webThreadPool = jettyThreadPool("Web Thread (5) -", 16, 16, false);
+    final ThreadPool webThreadPool = jettyThreadPool("Honey | Web Thread", 16, 16, false);
     this.javalin =
         Javalin.createAndStart(
             javalinConfig -> {
