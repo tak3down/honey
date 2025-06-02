@@ -13,5 +13,6 @@ public interface ThrowingSupplier<T extends Throwable, R> extends Supplier<R> {
       throw new IllegalStateException(throwable);
     }
   }
+
   R getWithException() throws T;
 }

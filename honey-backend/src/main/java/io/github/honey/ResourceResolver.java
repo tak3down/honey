@@ -10,7 +10,7 @@ final class ResourceResolver {
 
   private final HoneyConfig honeyConfig;
 
-  ResourceResolver(HoneyConfig honeyConfig) {
+  ResourceResolver(final HoneyConfig honeyConfig) {
     this.honeyConfig = honeyConfig;
   }
 
@@ -22,9 +22,9 @@ final class ResourceResolver {
       }
 
       if (uri.endsWith(".html") || uri.endsWith(".js")) {
-        byte[] rawBytes = toByteArray(originalStream);
+        final byte[] rawBytes = toByteArray(originalStream);
 
-        byte[] replacedBytes = getReplacedBytes(rawBytes);
+        final byte[] replacedBytes = getReplacedBytes(rawBytes);
         return () -> Either.right(new ByteArrayInputStream(replacedBytes));
       }
 
@@ -37,7 +37,7 @@ final class ResourceResolver {
     }
   }
 
-  private byte[] getReplacedBytes(byte[] rawBytes) {
+  private byte[] getReplacedBytes(final byte[] rawBytes) {
     String textContent = new String(rawBytes, UTF_8);
 
     textContent = textContent.replace("{{HONEY.PORT}}", String.valueOf(honeyConfig.port));
@@ -48,9 +48,9 @@ final class ResourceResolver {
     return textContent.getBytes(UTF_8);
   }
 
-  private byte[] toByteArray(InputStream in) throws IOException {
-    ByteArrayOutputStream buffer = new ByteArrayOutputStream();
-    byte[] tmp = new byte[4 * 1024];
+  private byte[] toByteArray(final InputStream in) throws IOException {
+    final ByteArrayOutputStream buffer = new ByteArrayOutputStream();
+    final byte[] tmp = new byte[4 * 1024];
     int read;
     while ((read = in.read(tmp)) != -1) {
       buffer.write(tmp, 0, read);

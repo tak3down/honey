@@ -87,6 +87,8 @@ public sealed interface Either<L, R> permits Either.Left, Either.Right {
       return true;
     }
   }
+
   boolean isLeft();
+
   boolean isRight();
 }

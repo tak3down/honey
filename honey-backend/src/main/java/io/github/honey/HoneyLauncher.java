@@ -24,6 +24,7 @@ public final class HoneyLauncher {
         System.exit(0);
       }
     }
+
     void runSafely() throws Exception;
   }
 }
