@@ -18,7 +18,7 @@ dependencies {
     api("io.javalin:javalin:$javalin")
     api("io.javalin.community.routing:routing-dsl:$javalin")
 
-    val jackson = "2.18.3"
+    val jackson = "2.19.0"
     api("com.fasterxml.jackson.datatype:jackson-datatype-jsr310:$jackson")
     api("com.fasterxml.jackson.dataformat:jackson-dataformat-xml:$jackson")
 }
