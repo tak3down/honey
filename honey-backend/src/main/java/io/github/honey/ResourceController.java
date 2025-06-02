@@ -2,7 +2,7 @@ package io.github.honey;
 
 import static io.github.honey.ApiResponse.internalServerError;
 import static io.github.honey.ApiResponse.notFoundError;
-import static io.github.honey.Either.*;
+import static io.github.honey.Either.right;
 import static io.github.honey.HoneyController.responseEither;
 import static io.javalin.community.routing.Route.GET;
 import static io.javalin.http.ContentType.OCTET_STREAM;
@@ -12,7 +12,9 @@ import io.javalin.http.ContentType;
 import io.javalin.http.Context;
 import java.io.IOException;
 import java.io.InputStream;
-import java.util.*;
+import java.util.Enumeration;
+import java.util.HashSet;
+import java.util.Set;
 import java.util.function.Supplier;
 import java.util.jar.JarEntry;
 import java.util.jar.JarFile;
@@ -73,11 +75,7 @@ final class ResourceController extends HoneyControllerRegistry {
   }
 
   private String fixPath(final String path) {
-    if (path.startsWith("/static/")) {
-      return path.substring("/static".length());
-    } else {
-      return path;
-    }
+    return path.startsWith("/static/") ? path.substring("/static".length()) : path;
   }
 
   private HoneyController directoryHandler(final String directoryPath) {
@@ -153,12 +151,12 @@ final class ResourceController extends HoneyControllerRegistry {
   private Either<ApiResponse, InputStream> respondWithRawResource(
       final Supplier<InputStream> resourceSource) {
     final InputStream in = resourceSource.get();
-    return (in != null) ? right(in) : notFoundError("Resource not found");
+    return in != null ? right(in) : notFoundError("Resource not found");
   }
 
   private String getExtension(final String uri) {
     final int lastDot = uri.lastIndexOf('.');
-    return (lastDot != -1) ? uri.substring(lastDot + 1) : "";
+    return lastDot != -1 ? uri.substring(lastDot + 1) : "";
   }
 
   private Set<String> listResources() throws IOException {
