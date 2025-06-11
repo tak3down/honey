@@ -172,7 +172,7 @@ final class NotFoundTemplate {
               padding-top: 0.5rem;
               animation: glowFooter 2s ease-in-out infinite alternate;
             ">
-              &copy; <span class="footer-glitch" data-text="2025 Sergiusz M">2025 Sergiusz Męcina — Coded in shadows</span>
+              &copy; <span class="footer-glitch" data-text="2025 Sergiusz">2025 Sergiusz — Coded in shadows</span>
             </div>
 
             <style>
