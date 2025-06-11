@@ -59,7 +59,3 @@ Development server:
 - **Clean Codebase**: Well-structured code following industry best practices
 
 ---
-
-## Showcase
-
-https://honey.veins.gg (Honey is being hosted 😱)
