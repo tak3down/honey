@@ -16,8 +16,8 @@ Flag quiz game, featuring user authentication, real-time leaderboards.
 **Backend**
 
 - [Java](https://www.java.com/) - Enterprise-grade runtime environment
+- [Javalin](https://javalin.io/) - Lightweight web framework
 - [Jackson](https://github.com/FasterXML/jackson-databind) - JSON processing library
-- [Javalin](https://javalin.io/) - Lightweight web framework (why would sb choose to use Spring?)
 
 ## Project Structure
 
