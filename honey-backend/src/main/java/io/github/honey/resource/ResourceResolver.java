@@ -23,9 +23,9 @@ final class ResourceResolver {
   }
 
   Supplier<Either<IOException, InputStream>> resolve(
-      final String uri, final Supplier<InputStream> resourceSource) {
+      final String uri, final Supplier<InputStream> resourceSupplier) {
     try {
-      final InputStream originalStream = resourceSource.get();
+      final InputStream originalStream = resourceSupplier.get();
       if (originalStream == null) {
         return null;
       }

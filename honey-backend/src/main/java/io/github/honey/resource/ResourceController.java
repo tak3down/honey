@@ -10,6 +10,7 @@ import io.javalin.http.Context;
 import jakarta.annotation.PostConstruct;
 import java.io.IOException;
 import java.io.InputStream;
+import java.net.URL;
 import java.util.Enumeration;
 import java.util.HashSet;
 import java.util.Set;
@@ -116,26 +117,26 @@ final class ResourceController extends RestContainer {
   }
 
   private Either<RestResponse, InputStream> respondWithResource(
-      final Context context, final String uri, final Supplier<InputStream> inputStreamSupplier) {
+      final Context context, final String uri, final Supplier<InputStream> resourceSupplier) {
 
     final ContentType contentType = ContentType.getContentTypeByExtension(getExtension(uri));
     context.contentType(contentType != null ? contentType.getMimeType() : ContentType.OCTET_STREAM);
 
     if (uri.endsWith(".html") || uri.endsWith(".js")) {
-      return respondWithProcessedResource(context, uri, inputStreamSupplier);
+      return respondWithProcessedResource(context, uri, resourceSupplier);
     } else {
-      return respondWithRawResource(inputStreamSupplier);
+      return respondWithRawResource(resourceSupplier);
     }
   }
 
   private Either<RestResponse, InputStream> respondWithProcessedResource(
-      final Context context, final String uri, final Supplier<InputStream> inputStreamSupplier) {
+      final Context context, final String uri, final Supplier<InputStream> resourceSupplier) {
     context.res().setCharacterEncoding("UTF-8");
 
     Either<IOException, InputStream> resolvedResource = null;
 
     final Supplier<Either<IOException, InputStream>> resolve =
-        resourceResolver.resolve(uri, inputStreamSupplier);
+        resourceResolver.resolve(uri, resourceSupplier);
     if (resolve != null) {
       resolvedResource = resolve.get();
     }
@@ -164,12 +165,17 @@ final class ResourceController extends RestContainer {
     return lastDot == -1 ? "" : uri.substring(lastDot + 1);
   }
 
+  @SuppressWarnings("SameParameterValue")
   private Set<String> listResources(final String path) {
-    final Set<String> resources = new HashSet<>();
+    final URL resourceByPath = getClass().getClassLoader().getResource(path);
+    if (resourceByPath == null) {
+      return Set.of();
+    }
 
-    final String jarPath = getClass().getClassLoader().getResource(path).getPath();
+    final String jarPath = resourceByPath.getPath();
     final String jarFilePath = jarPath.substring(5, jarPath.indexOf("!"));
 
+    final Set<String> resources = new HashSet<>();
     try (final JarFile jar = new JarFile(jarFilePath)) {
       final Enumeration<JarEntry> entries = jar.entries();
       while (entries.hasMoreElements()) {
