@@ -1,6 +1,6 @@
-package io.github.honey;
+package io.github.honey.resource;
 
-public final class ResourceException extends RuntimeException {
+final class ResourceException extends RuntimeException {
 
   ResourceException(final String message, final Throwable cause) {
     super(message, cause);

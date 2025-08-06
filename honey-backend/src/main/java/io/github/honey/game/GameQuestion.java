@@ -1,4 +1,4 @@
-package io.github.honey;
+package io.github.honey.game;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
 import java.util.List;
@@ -24,35 +24,19 @@ public final class GameQuestion {
     this.questionNumber = questionNumber;
   }
 
-  public String getFlagUrl() {
+  public String flagUrl() {
     return flagUrl;
   }
 
-  public String getCorrectCountry() {
+  public String correctCountry() {
     return correctCountry;
   }
 
-  public List<String> getOptions() {
+  public List<String> options() {
     return options;
   }
 
-  public int getQuestionNumber() {
+  public int questionNumber() {
     return questionNumber;
-  }
-
-  @Override
-  public String toString() {
-    return "GameQuestion{"
-        + "flagUrl='"
-        + flagUrl
-        + '\''
-        + ", correctCountry='"
-        + correctCountry
-        + '\''
-        + ", options="
-        + options
-        + ", questionNumber="
-        + questionNumber
-        + '}';
   }
 }

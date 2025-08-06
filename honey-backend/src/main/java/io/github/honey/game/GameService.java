@@ -1,37 +1,40 @@
-package io.github.honey;
+package io.github.honey.game;
 
-import static java.util.Collections.shuffle;
-import static java.util.stream.Collectors.toList;
-
+import io.github.honey.config.HoneyConfig;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ThreadLocalRandom;
+import java.util.stream.Collectors;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
-final class GameService {
+@Service
+final class GameService implements GameFacade {
 
-  private static final int MAX_LEADERBOARD_SIZE = 50;
-
-  private final Map<String, GameSession> activeSessions = new ConcurrentHashMap<>();
   private final List<LeaderboardEntry> leaderboard = new ArrayList<>();
-
+  private final Map<String, GameSession> activeSessions = new ConcurrentHashMap<>();
   private final List<String> countries = new ArrayList<>();
   private final Map<String, String> countryFlags = new HashMap<>();
 
+  @Autowired
   GameService(final HoneyConfig honeyConfig) {
     countryFlags.putAll(honeyConfig.countryFlags);
     countries.addAll(honeyConfig.countryFlags.keySet());
   }
 
-  GameSession getActiveSessionById(final String sessionId) {
+  @Override
+  public GameSession getActiveSessionById(final String sessionId) {
     return activeSessions.get(sessionId);
   }
 
-  List<LeaderboardEntry> getLeaderboard() {
+  @Override
+  public List<LeaderboardEntry> getLeaderboard() {
     return leaderboard.stream()
         .sorted(
             (a, b) -> {
@@ -41,11 +44,12 @@ final class GameService {
               }
               return scoreCompare;
             })
-        .limit(MAX_LEADERBOARD_SIZE)
-        .collect(toList());
+        .limit(50)
+        .collect(Collectors.toList());
   }
 
-  GameSession startNewGame(final String username) {
+  @Override
+  public GameSession startNewGame(final String username) {
     final String sessionId = UUID.randomUUID().toString();
     final GameSession session = new GameSession(sessionId, username);
 
@@ -57,13 +61,14 @@ final class GameService {
     return session;
   }
 
-  GameSession submitAnswer(final String sessionId, final String answer) {
+  @Override
+  public GameSession submitAnswer(final String sessionId, final String answer) {
     final GameSession session = activeSessions.get(sessionId);
     if (session == null) {
       return null;
     }
 
-    final boolean isCorrect = session.getCurrentQuestion().getCorrectCountry().equals(answer);
+    final boolean isCorrect = session.getCurrentQuestion().correctCountry().equals(answer);
     if (isCorrect) {
       session.setScore(session.getScore() + 1);
     }
@@ -133,7 +138,7 @@ final class GameService {
   private GameQuestion generateQuestion(final GameSession session, final int questionNumber) {
 
     // used to avoid repetition of countries in session
-    // for a better user experience:D
+    // for a better user experience :D
 
     final List<String> countriesLeft = session.getCountriesLeft();
     if (countriesLeft.isEmpty()) {
@@ -161,7 +166,7 @@ final class GameService {
       availableCountries.remove(wrongCountry);
     }
 
-    shuffle(options);
+    Collections.shuffle(options);
 
     return new GameQuestion(flagUrl, correctCountry, options, questionNumber);
   }

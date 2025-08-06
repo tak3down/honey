@@ -1,17 +1,17 @@
-package io.github.honey;
+package io.github.honey.notfound;
 
 import static java.util.regex.Pattern.compile;
 
 import java.util.regex.Pattern;
 import org.intellij.lang.annotations.Language;
 
-final class NotFoundTemplate {
+final class NotFoundPageRenderer {
 
-  private static final Pattern XSS_FILTER = compile("[^A-Za-z0-9/._\\- ]");
+  private static final Pattern PATH_SANITIZATION_PATTERN = compile("[^A-Za-z0-9/._\\- ]");
 
-  private NotFoundTemplate() {}
+  private NotFoundPageRenderer() {}
 
-  static @Language("html") String createNotFoundPage(final String details) {
+  static @Language("html") String renderNotFoundPage(final String path) {
     return """
         <html lang="pl">
           <head>
@@ -144,7 +144,7 @@ final class NotFoundTemplate {
               <h1 class="glitch" data-text="404 NIE ZNALEZIONO">404 NIE ZNALEZIONO</h1>
               <p>Wpadłeś w cyfrową otchłań.</p>
               <div class="not-found-info">
-                {{DETAILS}}
+                {{details}}
               </div>
               <div class="ascii">
                 {\\\\__/}<br>
@@ -236,9 +236,11 @@ final class NotFoundTemplate {
         </html>
         """
         .replace(
-            "{{DETAILS}}",
-            details.isEmpty()
+            "{{details}}",
+            path.isEmpty()
                 ? "<p><i>Nie podano żadnych szczegółów.</i></p>"
-                : "<p><i>Ścieżka: " + XSS_FILTER.matcher(details).replaceAll("") + "</i></p>");
+                : "<p><i>Ścieżka: "
+                    + PATH_SANITIZATION_PATTERN.matcher(path).replaceAll("")
+                    + "</i></p>");
   }
 }

@@ -1,19 +1,24 @@
-package io.github.honey;
+package io.github.honey.resource;
 
 import static java.nio.charset.StandardCharsets.UTF_8;
 
-import io.github.honey.shared.Either;
+import io.github.honey.config.HoneyConfig;
+import io.github.honey.either.Either;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.function.Supplier;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 
+@Component
 final class ResourceResolver {
 
   private final HoneyConfig honeyConfig;
 
+  @Autowired
   ResourceResolver(final HoneyConfig honeyConfig) {
     this.honeyConfig = honeyConfig;
   }

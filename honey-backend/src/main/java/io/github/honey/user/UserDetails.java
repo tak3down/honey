@@ -1,13 +1,14 @@
-package io.github.honey;
+package io.github.honey.user;
 
-import com.fasterxml.jackson.annotation.JsonCreator;
+import jakarta.persistence.Entity;
+import jakarta.persistence.Id;
 
+@Entity
 public final class UserDetails {
 
-  private String username;
+  @Id private String username;
   private String password;
 
-  @JsonCreator
   public UserDetails() {}
 
   public UserDetails(final String username, final String password) {
@@ -15,11 +16,11 @@ public final class UserDetails {
     this.password = password;
   }
 
-  public String getUsername() {
+  public String username() {
     return username;
   }
 
-  public String getPassword() {
+  public String password() {
     return password;
   }
 }

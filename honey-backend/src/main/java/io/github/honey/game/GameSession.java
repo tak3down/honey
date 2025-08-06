@@ -1,4 +1,4 @@
-package io.github.honey;
+package io.github.honey.game;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
 import java.util.LinkedList;
@@ -35,16 +35,8 @@ public final class GameSession {
     return sessionId;
   }
 
-  public void setSessionId(final String sessionId) {
-    this.sessionId = sessionId;
-  }
-
   public String getUsername() {
     return username;
-  }
-
-  public void setUsername(final String username) {
-    this.username = username;
   }
 
   public int getScore() {
@@ -59,16 +51,8 @@ public final class GameSession {
     return totalQuestions;
   }
 
-  public void setTotalQuestions(final int totalQuestions) {
-    this.totalQuestions = totalQuestions;
-  }
-
   public long getStartTime() {
     return startTime;
-  }
-
-  public void setStartTime(final long startTime) {
-    this.startTime = startTime;
   }
 
   public long getEndTime() {
@@ -105,37 +89,5 @@ public final class GameSession {
 
   public List<String> getCountriesLeft() {
     return countriesLeft;
-  }
-
-  public void setCountriesLeft(final List<String> countriesLeft) {
-    this.countriesLeft = countriesLeft;
-  }
-
-  @Override
-  public String toString() {
-    return "GameSession{"
-        + "sessionId='"
-        + sessionId
-        + '\''
-        + ", username='"
-        + username
-        + '\''
-        + ", score="
-        + score
-        + ", totalQuestions="
-        + totalQuestions
-        + ", startTime="
-        + startTime
-        + ", endTime="
-        + endTime
-        + ", isFinished="
-        + isFinished
-        + ", currentQuestion="
-        + currentQuestion
-        + ", questionNumber="
-        + questionNumber
-        + ", countriesLeft="
-        + countriesLeft
-        + '}';
   }
 }

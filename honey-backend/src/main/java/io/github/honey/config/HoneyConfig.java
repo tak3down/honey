@@ -1,44 +1,46 @@
-package io.github.honey;
+package io.github.honey.config;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.SerializationFeature;
-import com.fasterxml.jackson.databind.json.JsonMapper;
+import jakarta.annotation.PostConstruct;
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.HashMap;
 import java.util.Map;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 
+@Component
 public final class HoneyConfig {
 
-  @JsonIgnore private final ObjectMapper jsonMapper;
+  private final @JsonIgnore ObjectMapper objectMapper;
 
   public String host;
   public int port;
   public String apiBase;
-
   public String forwardedIp;
+  public Map<String, String> countryFlags;
 
-  public Map<String, String> countryFlags = new HashMap<>();
-
-  public HoneyConfig() {
-    jsonMapper = new JsonMapper().enable(SerializationFeature.INDENT_OUTPUT);
-
+  @Autowired
+  public HoneyConfig(final ObjectMapper objectMapper) {
+    this.objectMapper = objectMapper;
     defaultValues();
   }
 
-  public void load() {
+  @PostConstruct
+  private void loadConfig() {
     final Path dataPath = Paths.get("");
     final File configFile = dataPath.resolve("config.json").toFile();
+
     if (!configFile.exists()) {
       try {
         if (!configFile.createNewFile()) {
           throw new IOException("Failed to create config file");
         }
 
-        jsonMapper.writeValue(configFile, this);
+        objectMapper.writeValue(configFile, this);
         return;
 
       } catch (final Exception exception) {
@@ -47,8 +49,8 @@ public final class HoneyConfig {
     }
 
     try {
-      jsonMapper.readerForUpdating(this).readValue(configFile);
-    } catch (final IOException exception) {
+      objectMapper.readerForUpdating(this).readValue(configFile);
+    } catch (final Exception exception) {
       throw new HoneyConfigException(
           "Failed to load config, because of unexpected exception", exception);
     }
@@ -62,6 +64,7 @@ public final class HoneyConfig {
     // CF-Connecting-IP OR X-Real-IP
     forwardedIp = "X-Real-IP";
 
+    countryFlags = new HashMap<>();
     countryFlags.put("Stany Zjednoczone", "https://flagcdn.com/w320/us.png");
     countryFlags.put("Wielka Brytania", "https://flagcdn.com/w320/gb.png");
     countryFlags.put("Niemcy", "https://flagcdn.com/w320/de.png");

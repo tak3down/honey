@@ -1,17 +1,13 @@
-package io.github.honey;
+package io.github.honey.resource;
 
-import static io.github.honey.HoneyController.responseEither;
-import static io.github.honey.shared.ApiResponse.internalServerError;
-import static io.github.honey.shared.ApiResponse.notFoundError;
-import static io.github.honey.shared.Either.right;
-import static io.javalin.community.routing.Route.GET;
-import static io.javalin.http.ContentType.OCTET_STREAM;
-import static java.util.Optional.ofNullable;
-
-import io.github.honey.shared.ApiResponse;
-import io.github.honey.shared.Either;
+import io.github.honey.either.Either;
+import io.github.honey.rest.RestContainer;
+import io.github.honey.rest.RestResponse;
+import io.github.honey.rest.RestRoute;
+import io.javalin.community.routing.Route;
 import io.javalin.http.ContentType;
 import io.javalin.http.Context;
+import jakarta.annotation.PostConstruct;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.Enumeration;
@@ -20,28 +16,32 @@ import java.util.Set;
 import java.util.function.Supplier;
 import java.util.jar.JarEntry;
 import java.util.jar.JarFile;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
 
-final class ResourceController extends HoneyControllerRegistry {
+@Controller
+final class ResourceController extends RestContainer {
 
   private final ResourceResolver resourceResolver;
 
+  @Autowired
   ResourceController(final ResourceResolver resourceResolver) {
     this.resourceResolver = resourceResolver;
-    registerRoutes();
   }
 
+  @PostConstruct
   private void registerRoutes() {
-    final Set<String> resourcePaths = listResources();
+    final Set<String> resourcePaths = listResources("static");
 
     final Set<String> registeredPaths = new HashSet<>();
-    final Set<HoneyController> controllers = new HashSet<>();
+    final Set<RestRoute> controllers = new HashSet<>();
 
-    final HoneyController index = indexHandler();
+    final RestRoute index = indexHandler();
     controllers.add(index);
     registeredPaths.add(index.path());
 
     for (final String resourcePath : resourcePaths) {
-      final HoneyController controller;
+      final RestRoute controller;
       if (resourcePath.endsWith("/")) {
         controller = directoryHandler(resourcePath);
       } else {
@@ -53,10 +53,10 @@ final class ResourceController extends HoneyControllerRegistry {
       }
     }
 
-    routes(controllers.toArray(HoneyController[]::new));
+    registerRoute(controllers.toArray(RestRoute[]::new));
   }
 
-  private HoneyController rootFileHandler(final String resourcePath) {
+  private RestRoute rootFileHandler(final String resourcePath) {
     final String webPath = fixPath("/" + resourcePath);
 
     final String stripLeadingStatic;
@@ -66,26 +66,26 @@ final class ResourceController extends HoneyControllerRegistry {
       stripLeadingStatic = resourcePath;
     }
 
-    return new HoneyController(
+    return new RestRoute(
         webPath,
-        responseEither(context -> respondWithBundledResource(context, stripLeadingStatic)),
-        GET);
+        respondEither(context -> respondWithBundledResource(context, stripLeadingStatic)),
+        Route.GET);
   }
 
   private String fixPath(final String path) {
     return path.startsWith("/static/") ? path.substring("/static".length()) : path;
   }
 
-  private HoneyController directoryHandler(final String directoryPath) {
+  private RestRoute directoryHandler(final String directoryPath) {
     String base = fixPath("/" + directoryPath);
     if (base.endsWith("/")) {
       base = base.substring(0, base.length() - 1);
     }
 
     final String routePattern = base + "/{path}";
-    return new HoneyController(
+    return new RestRoute(
         routePattern,
-        responseEither(
+        respondEither(
             context -> {
               final String fileName = context.pathParam("path");
               final String fullPath = directoryPath + fileName;
@@ -99,25 +99,27 @@ final class ResourceController extends HoneyControllerRegistry {
 
               return respondWithBundledResource(context, stripLeadingStatic);
             }),
-        GET);
+        Route.GET);
   }
 
-  private HoneyController indexHandler() {
-    return new HoneyController(
-        "/", responseEither(context -> respondWithBundledResource(context, "index.html")), GET);
+  private RestRoute indexHandler() {
+    return new RestRoute(
+        "/",
+        respondEither(context -> respondWithBundledResource(context, "index.html")),
+        Route.GET);
   }
 
-  private Either<ApiResponse, InputStream> respondWithBundledResource(
+  private Either<RestResponse, InputStream> respondWithBundledResource(
       final Context ctx, final String uri) {
     return respondWithResource(
         ctx, uri, () -> getClass().getClassLoader().getResourceAsStream("static/" + uri));
   }
 
-  private Either<ApiResponse, InputStream> respondWithResource(
+  private Either<RestResponse, InputStream> respondWithResource(
       final Context context, final String uri, final Supplier<InputStream> inputStreamSupplier) {
 
     final ContentType contentType = ContentType.getContentTypeByExtension(getExtension(uri));
-    context.contentType(contentType != null ? contentType.getMimeType() : OCTET_STREAM);
+    context.contentType(contentType != null ? contentType.getMimeType() : ContentType.OCTET_STREAM);
 
     if (uri.endsWith(".html") || uri.endsWith(".js")) {
       return respondWithProcessedResource(context, uri, inputStreamSupplier);
@@ -126,52 +128,53 @@ final class ResourceController extends HoneyControllerRegistry {
     }
   }
 
-  private Either<ApiResponse, InputStream> respondWithProcessedResource(
+  private Either<RestResponse, InputStream> respondWithProcessedResource(
       final Context context, final String uri, final Supplier<InputStream> inputStreamSupplier) {
     context.res().setCharacterEncoding("UTF-8");
 
-    final Either<IOException, InputStream> supplied =
-        ofNullable(resourceResolver.resolve(uri, inputStreamSupplier))
-            .map(Supplier::get)
-            .orElse(null);
+    Either<IOException, InputStream> resolvedResource = null;
 
-    if (supplied == null) {
-      return notFoundError(uri);
+    final Supplier<Either<IOException, InputStream>> resolve =
+        resourceResolver.resolve(uri, inputStreamSupplier);
+    if (resolve != null) {
+      resolvedResource = resolve.get();
     }
 
-    if (supplied.isLeft()) {
-      return internalServerError("Cannot supply resource: " + uri);
+    if (resolvedResource == null) {
+      return RestResponse.notFound(uri).either();
     }
 
-    return right(supplied.right());
+    if (resolvedResource.isLeft()) {
+      return RestResponse.internalServer("Cannot supply resource: %s".formatted(uri)).either();
+    }
+
+    return Either.right(resolvedResource.right());
   }
 
-  private Either<ApiResponse, InputStream> respondWithRawResource(
+  private Either<RestResponse, InputStream> respondWithRawResource(
       final Supplier<InputStream> inputStreamSupplier) {
     final InputStream inputStream = inputStreamSupplier.get();
-    return inputStream != null ? right(inputStream) : notFoundError("Resource not found");
+    return inputStream != null
+        ? Either.right(inputStream)
+        : RestResponse.notFound("Resource not found").either();
   }
 
   private String getExtension(final String uri) {
     final int lastDot = uri.lastIndexOf('.');
-    return lastDot != -1 ? uri.substring(lastDot + 1) : "";
+    return lastDot == -1 ? "" : uri.substring(lastDot + 1);
   }
 
-  private Set<String> listResources() {
-
+  private Set<String> listResources(final String path) {
     final Set<String> resources = new HashSet<>();
-    final String path = "static";
+
     final String jarPath = getClass().getClassLoader().getResource(path).getPath();
     final String jarFilePath = jarPath.substring(5, jarPath.indexOf("!"));
 
     try (final JarFile jar = new JarFile(jarFilePath)) {
       final Enumeration<JarEntry> entries = jar.entries();
       while (entries.hasMoreElements()) {
-        final JarEntry entry = entries.nextElement();
-        final String name =
-            entry.getName(); // e.g. "static/index.html" or "static/_next/static/css/"
+        final String name = entries.nextElement().getName();
         if (name.startsWith(path)) {
-          // Keep both files and directories. Directories already end with “/”
           resources.add(name);
         }
       }

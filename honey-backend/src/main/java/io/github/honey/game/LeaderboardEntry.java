@@ -1,4 +1,4 @@
-package io.github.honey;
+package io.github.honey.game;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
 import java.time.LocalDateTime;
@@ -13,9 +13,9 @@ public final class LeaderboardEntry implements Comparable<LeaderboardEntry> {
   private LocalDateTime completedAt;
 
   @JsonCreator
-  public LeaderboardEntry() {}
+  LeaderboardEntry() {}
 
-  public LeaderboardEntry(
+  LeaderboardEntry(
       final String username,
       final int score,
       final long timeElapsed,

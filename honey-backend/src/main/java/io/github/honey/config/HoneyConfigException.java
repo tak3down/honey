@@ -1,6 +1,6 @@
-package io.github.honey;
+package io.github.honey.config;
 
-public final class HoneyConfigException extends RuntimeException {
+final class HoneyConfigException extends IllegalStateException {
 
   HoneyConfigException(final String message, final Throwable cause) {
     super(message, cause);

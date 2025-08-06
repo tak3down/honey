@@ -1,7 +1,6 @@
-package io.github.honey.shared;
+package io.github.honey.either;
 
 import java.util.NoSuchElementException;
-import java.util.function.Consumer;
 
 public sealed interface Either<L, R> permits Either.Left, Either.Right {
 
@@ -13,19 +12,6 @@ public sealed interface Either<L, R> permits Either.Left, Either.Right {
     return new Right<>(value);
   }
 
-  static <T extends Throwable, R> Either<T, R> throwing(
-      final Class<T> throwableType, final ThrowingSupplier<T, R> supplier) {
-    try {
-      return right(supplier.get());
-    } catch (final Throwable throwable) {
-      if (throwableType.isInstance(throwable)) {
-        return left(throwableType.cast(throwable));
-      } else {
-        throw new IllegalStateException(throwable);
-      }
-    }
-  }
-
   default L left() {
     throw new NoSuchElementException("Either does not contain left.");
   }
@@ -34,25 +20,9 @@ public sealed interface Either<L, R> permits Either.Left, Either.Right {
     throw new NoSuchElementException("Either does not contain right.");
   }
 
-  default Either<L, R> peekLeft(final Consumer<L> consumer) {
-    if (isLeft()) {
-      consumer.accept(left());
-    }
-    return this;
-  }
+  boolean isLeft();
 
-  default Either<L, R> peekRight(final Consumer<R> consumer) {
-    if (isRight()) {
-      consumer.accept(right());
-    }
-    return this;
-  }
-
-  default Either<L, R> peek(final Consumer<L> leftConsumer, final Consumer<R> rightConsumer) {
-    peekLeft(leftConsumer);
-    peekRight(rightConsumer);
-    return this;
-  }
+  boolean isRight();
 
   record Left<L, R>(L value) implements Either<L, R> {
     @Override
@@ -87,8 +57,4 @@ public sealed interface Either<L, R> permits Either.Left, Either.Right {
       return true;
     }
   }
-
-  boolean isLeft();
-
-  boolean isRight();
 }

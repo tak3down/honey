@@ -11,7 +11,7 @@
 
   <logger level="WARN" name="org.jetbrains.exposed.sql"/>
   <logger level="INFO" name="io.swagger.v3.parser"/>
-  <logger level="INFO" name="io.github.honey.Honey"/>
+  <logger level="INFO" name="io.github.honey.HoneyApplication"/>
   <logger level="WARN" name="org.apache.http.impl.conn.Wire"/>
   <logger level="WARN" name="o.e.j"/>
   <logger level="WARN" name="o.e.jetty"/>

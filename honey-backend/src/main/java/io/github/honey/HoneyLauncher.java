@@ -1,32 +1,12 @@
 package io.github.honey;
 
-import org.slf4j.LoggerFactory;
+import org.springframework.boot.SpringApplication;
+import org.springframework.boot.autoconfigure.SpringBootApplication;
 
-public final class HoneyLauncher {
-
-  private HoneyLauncher() {}
+@SpringBootApplication
+public class HoneyLauncher {
 
   public static void main(final String[] args) {
-    final Honey honey = new Honey();
-    final Thread thread = new Thread((SafeRunnable) honey::start);
-    thread.setName("Honey | Main Thread");
-    Runtime.getRuntime().addShutdownHook(new Thread((SafeRunnable) honey::stop));
-    thread.start();
-  }
-
-  @FunctionalInterface
-  interface SafeRunnable extends Runnable {
-
-    @Override
-    default void run() {
-      try {
-        runSafely();
-      } catch (final Exception exception) {
-        LoggerFactory.getLogger(HoneyLauncher.class).error("Failed to run honey", exception);
-        System.exit(0);
-      }
-    }
-
-    void runSafely() throws Exception;
+    SpringApplication.run(HoneyLauncher.class, args);
   }
 }
