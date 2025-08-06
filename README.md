@@ -1,4 +1,4 @@
-# Honey (*miodek*)
+# Honey
 
 ## Overview
 
@@ -26,27 +26,12 @@ Flag quiz game, featuring user authentication, real-time leaderboards.
 └── honey-backend/
 ```
 
-## Key Features
+## Why honey?
 
 - **Authentication System** - Login/registration workflow
 - **Real-time Leaderboards** - Live ranking updates and competition tracking
 - **Responsive Design** - Cross-device compatibility with Tailwind CSS
 - **Single JAR Deployment** - Self-contained application requiring no external web server
-
-## Deployment
-
-Build production-ready JAR:
-
-```bash
-./gradlew shadowJar
-```
-
-Development server:
-
-```bash
-# Run HoneyLauncher class from IDE
-# Server available at localhost:80
-```
 
 ## Technical Highlights
 
