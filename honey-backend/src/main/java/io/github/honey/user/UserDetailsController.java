@@ -7,6 +7,7 @@ import io.github.honey.rest.RestRoute;
 import io.javalin.community.routing.Route;
 import io.javalin.http.Context;
 import jakarta.annotation.PostConstruct;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 
 @Controller
@@ -14,6 +15,7 @@ final class UserDetailsController extends RestContainer {
 
   private final UserDetailsFacade userDetailsFacade;
 
+  @Autowired
   UserDetailsController(final UserDetailsFacade userDetailsFacade) {
     this.userDetailsFacade = userDetailsFacade;
   }

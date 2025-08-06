@@ -23,7 +23,7 @@ public final class HoneyConfig {
   public Map<String, String> countryFlags;
 
   @Autowired
-  public HoneyConfig(final ObjectMapper objectMapper) {
+  HoneyConfig(final ObjectMapper objectMapper) {
     this.objectMapper = objectMapper;
     defaultValues();
   }

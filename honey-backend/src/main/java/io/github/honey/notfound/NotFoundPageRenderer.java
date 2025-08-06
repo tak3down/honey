@@ -4,14 +4,15 @@ import static java.util.regex.Pattern.compile;
 
 import java.util.regex.Pattern;
 import org.intellij.lang.annotations.Language;
+import org.springframework.stereotype.Component;
 
+@Component
 final class NotFoundPageRenderer {
 
   private static final Pattern PATH_SANITIZATION_PATTERN = compile("[^A-Za-z0-9/._\\- ]");
 
-  private NotFoundPageRenderer() {}
-
-  static @Language("html") String renderNotFoundPage(final String path) {
+  @Language("html")
+  String renderNotFoundPage(final String path) {
     return """
         <html lang="pl">
           <head>

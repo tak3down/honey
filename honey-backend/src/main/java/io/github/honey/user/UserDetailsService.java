@@ -3,6 +3,7 @@ package io.github.honey.user;
 import jakarta.annotation.PostConstruct;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -11,6 +12,7 @@ final class UserDetailsService implements UserDetailsFacade {
   private final UserDetailsRepository userDetailsRepository;
   private final Map<String, UserDetails> usernameToUserMap = new ConcurrentHashMap<>();
 
+  @Autowired
   UserDetailsService(final UserDetailsRepository userDetailsRepository) {
     this.userDetailsRepository = userDetailsRepository;
   }
@@ -25,10 +27,7 @@ final class UserDetailsService implements UserDetailsFacade {
   @Override
   public UserDetails authenticateUser(final String username, final String password) {
     final UserDetails userDetails = getUserByUsername(username);
-    if (userDetails != null && userDetails.password().equals(password)) {
-      return userDetails;
-    }
-    return null;
+    return userDetails != null && userDetails.password().equals(password) ? userDetails : null;
   }
 
   @Override

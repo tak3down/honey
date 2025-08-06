@@ -9,6 +9,7 @@ import io.javalin.http.NotFoundResponse;
 import jakarta.annotation.PostConstruct;
 import java.util.function.Consumer;
 import org.jetbrains.annotations.NotNull;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 
 @Controller
@@ -17,7 +18,8 @@ final class NotFoundController implements ExceptionHandler<NotFoundResponse>, Ha
   private final Javalin javalin;
   private final Consumer<Context> defaultNotFoundHandler;
 
-  NotFoundController(final Javalin javalin) {
+  @Autowired
+  NotFoundController(final Javalin javalin, final NotFoundPageRenderer notFoundPageRenderer) {
     this.javalin = javalin;
     this.defaultNotFoundHandler =
         context -> {
@@ -25,7 +27,7 @@ final class NotFoundController implements ExceptionHandler<NotFoundResponse>, Ha
             return;
           }
 
-          context.html(NotFoundPageRenderer.renderNotFoundPage(context.req().getRequestURI()));
+          context.html(notFoundPageRenderer.renderNotFoundPage(context.req().getRequestURI()));
           context.status(HttpStatus.NOT_FOUND);
         };
   }
