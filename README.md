@@ -15,22 +15,23 @@ Flag quiz game, featuring user authentication, real-time leaderboards.
 
 **Frontend**
 
-- [TypeScript](https://www.typescriptlang.org/) - Type-safe development
-- [Next.js](https://nextjs.org/) - React framework with SSR capabilities
-- [React](https://react.dev/) - Component-based UI architecture
-- [Tailwind CSS](https://tailwindcss.com/) - Utility-first styling framework
+- [TypeScript](https://www.typescriptlang.org/)
+- [Next.js](https://nextjs.org/)
+- [React](https://react.dev/)
+- [Tailwind CSS](https://tailwindcss.com/)
 
 **Backend**
 
-- [Java](https://www.java.com/) - Enterprise-grade runtime environment
-- [Javalin](https://javalin.io/) - Lightweight web framework
-- [Jackson](https://github.com/FasterXML/jackson-databind) - Json processing library
+- [Java](https://www.java.com/)
+- [Javalin](https://javalin.io/)
+- [Jackson](https://github.com/FasterXML/jackson-databind)
+- [Spring](https://spring.io/)
 
 ## Why honey?
 
-- **Authentication System** - Login/registration workflow
-- **Real-time Leaderboards** - Live ranking updates and competition tracking
-- **Responsive Design** - Cross-device compatibility with Tailwind CSS
-- **Single JAR Deployment** - Self-contained application requiring no external web server
+- Login/registration workflow
+- Live ranking updates and competition tracking
+- Cross-device compatibility with Tailwind CSS
+- Self-contained application requiring no external web server
 
 ---
