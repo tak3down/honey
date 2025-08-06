@@ -5,7 +5,6 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.annotation.PostConstruct;
 import java.io.File;
 import java.io.IOException;
-import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.HashMap;
 import java.util.Map;
@@ -31,28 +30,25 @@ public final class HoneyConfig {
 
   @PostConstruct
   private void loadConfig() {
-    final Path dataPath = Paths.get("");
-    final File configFile = dataPath.resolve("config.json").toFile();
-
-    if (!configFile.exists()) {
+    final File configFile = Paths.get("").resolve("config.json").toFile();
+    if (configFile.exists()) {
       try {
-        if (!configFile.createNewFile()) {
-          throw new IOException("Failed to create config file");
-        }
-
-        objectMapper.writeValue(configFile, this);
+        objectMapper.readerForUpdating(this).readValue(configFile);
         return;
-
       } catch (final Exception exception) {
-        throw new HoneyConfigException("Failed to create config file", exception);
+        throw new HoneyConfigException(
+            "Failed to load config, because of unexpected exception", exception);
       }
     }
 
     try {
-      objectMapper.readerForUpdating(this).readValue(configFile);
+      if (!configFile.createNewFile()) {
+        throw new IOException("Failed to create config file");
+      }
+
+      objectMapper.writeValue(configFile, this);
     } catch (final Exception exception) {
-      throw new HoneyConfigException(
-          "Failed to load config, because of unexpected exception", exception);
+      throw new HoneyConfigException("Failed to create config file", exception);
     }
   }
 
