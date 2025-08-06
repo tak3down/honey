@@ -1,13 +1,12 @@
 package io.github.honey.resource;
 
-import static java.nio.charset.StandardCharsets.UTF_8;
-
 import io.github.honey.config.HoneyConfig;
 import io.github.honey.either.Either;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.nio.charset.StandardCharsets;
 import java.util.function.Supplier;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -33,8 +32,8 @@ final class ResourceResolver {
 
       if (uri.endsWith(".html") || uri.endsWith(".js")) {
         final byte[] rawBytes = toByteArray(originalStream);
-
         final byte[] replacedBytes = getReplacedBytes(rawBytes);
+
         return () -> Either.right(new ByteArrayInputStream(replacedBytes));
       }
 
@@ -48,14 +47,14 @@ final class ResourceResolver {
   }
 
   private byte[] getReplacedBytes(final byte[] rawBytes) {
-    String textContent = new String(rawBytes, UTF_8);
+    String textContent = new String(rawBytes, StandardCharsets.UTF_8);
 
     textContent = textContent.replace("{{HONEY.PORT}}", String.valueOf(honeyConfig.port));
     textContent = textContent.replace("{{HONEY.HOST}}", String.valueOf(honeyConfig.host));
     textContent = textContent.replace("{{HONEY.API_BASE}}", String.valueOf(honeyConfig.apiBase));
     textContent = textContent.replace("{{HONEY.FORWARED_IP}}", honeyConfig.forwardedIp);
 
-    return textContent.getBytes(UTF_8);
+    return textContent.getBytes(StandardCharsets.UTF_8);
   }
 
   private byte[] toByteArray(final InputStream in) throws IOException {

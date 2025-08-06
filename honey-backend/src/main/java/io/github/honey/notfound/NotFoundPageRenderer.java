@@ -1,7 +1,5 @@
 package io.github.honey.notfound;
 
-import static java.util.regex.Pattern.compile;
-
 import java.util.regex.Pattern;
 import org.intellij.lang.annotations.Language;
 import org.springframework.stereotype.Component;
@@ -9,7 +7,7 @@ import org.springframework.stereotype.Component;
 @Component
 final class NotFoundPageRenderer {
 
-  private static final Pattern PATH_SANITIZATION_PATTERN = compile("[^A-Za-z0-9/._\\- ]");
+  private static final Pattern PATH_SANITIZATION_PATTERN = Pattern.compile("[^A-Za-z0-9/._\\- ]");
 
   @Language("html")
   String renderNotFoundPage(final String path) {
