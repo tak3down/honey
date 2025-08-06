@@ -4,6 +4,13 @@
 
 Flag quiz game, featuring user authentication, real-time leaderboards.
 
+## Project Structure
+
+```
+├── honey-frontend/
+└── honey-backend/
+```
+
 ## Architecture
 
 **Frontend**
@@ -17,14 +24,7 @@ Flag quiz game, featuring user authentication, real-time leaderboards.
 
 - [Java](https://www.java.com/) - Enterprise-grade runtime environment
 - [Javalin](https://javalin.io/) - Lightweight web framework
-- [Jackson](https://github.com/FasterXML/jackson-databind) - JSON processing library
-
-## Project Structure
-
-```
-├── honey-frontend/
-└── honey-backend/
-```
+- [Jackson](https://github.com/FasterXML/jackson-databind) - Json processing library
 
 ## Why honey?
 
@@ -32,10 +32,5 @@ Flag quiz game, featuring user authentication, real-time leaderboards.
 - **Real-time Leaderboards** - Live ranking updates and competition tracking
 - **Responsive Design** - Cross-device compatibility with Tailwind CSS
 - **Single JAR Deployment** - Self-contained application requiring no external web server
-
-## Technical Highlights
-
-- No external dependencies like Nginx required
-- Well-structured code :)
 
 ---
